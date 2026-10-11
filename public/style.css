@@ -1,4 +1,3 @@
-
 :root {
   --bg: #fbfbfd;
   --card: #ffffff;
@@ -263,7 +262,7 @@ a {
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 8px;
   margin-bottom: 18px;
 }
@@ -391,7 +390,7 @@ a {
   }
 
   .stats {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .actions {
@@ -489,4 +488,4 @@ a {
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
-    }
+}
