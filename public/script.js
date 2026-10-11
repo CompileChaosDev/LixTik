@@ -26,7 +26,10 @@ function isUrl(text) {
 
 function formatNumber(value) {
   const number = Number(value)
-  return Number.isFinite(number) ? number.toLocaleString('id-ID') : '-'
+  if (!Number.isFinite(number)) return '-'
+  if (number < 10000) return number.toLocaleString('id-ID')
+
+  return number.toLocaleString('id-ID', { notation: 'compact', maximumFractionDigits: 1 })
 }
 
 function showMessage(title, text, isError = false) {
@@ -115,6 +118,7 @@ function renderStats(stats) {
     ['views', 'Views'],
     ['likes', 'Suka'],
     ['comments', 'Komentar'],
+    ['favorites', 'Favorit'],
     ['shares', 'Share']
   ].filter(([key]) => stats && stats[key] != null)
 
@@ -298,4 +302,3 @@ $('btn-reset').addEventListener('click', () => {
 urlInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') search()
 })
-  
