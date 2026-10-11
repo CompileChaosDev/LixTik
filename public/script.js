@@ -115,7 +115,6 @@ function showSlide(index) {
 
 function renderStats(stats) {
   const items = [
-    ['views', 'Views'],
     ['likes', 'Suka'],
     ['comments', 'Komentar'],
     ['favorites', 'Favorit'],
@@ -302,3 +301,4 @@ $('btn-reset').addEventListener('click', () => {
 urlInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') search()
 })
+      
