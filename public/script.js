@@ -105,6 +105,9 @@ function showSlide(index) {
   document.querySelectorAll('.dot').forEach((dot, i) => {
     dot.classList.toggle('active', i === slideIndex)
   })
+
+  const counter = $('slide-counter')
+  if (counter) counter.textContent = `${slideIndex + 1} / ${photos.length}`
 }
 
 function renderStats(stats) {
@@ -137,7 +140,8 @@ function renderPhotoPost(data) {
     ? `
       <button class="arrow arrow-prev" type="button" data-action="prev" aria-label="Slide sebelumnya">&#8249;</button>
       <button class="arrow arrow-next" type="button" data-action="next" aria-label="Slide berikutnya">&#8250;</button>
-      <div class="dots">${photos.map((_, i) => `<span class="dot ${i === 0 ? 'active' : ''}"></span>`).join('')}</div>`
+      <div class="dots">${photos.map((_, i) => `<span class="dot ${i === 0 ? 'active' : ''}"></span>`).join('')}</div>
+      <span class="counter" id="slide-counter">1 / ${photos.length}</span>`
     : ''
 
   result.innerHTML = `
@@ -150,8 +154,8 @@ function renderPhotoPost(data) {
         ${controls}
       </div>
       <div class="stack">
-        <button class="btn btn-dark" type="button" data-action="slide">Download slide ini</button>
-        ${many ? `<button class="btn" type="button" data-action="zip">Download semua (ZIP) (${photos.length})</button>` : ''}
+        <button class="btn btn-dark" type="button" data-action="slide">Download foto ini</button>
+        ${many ? `<button class="btn" type="button" data-action="zip">Download semua foto (ZIP) (${photos.length})</button>` : ''}
         ${video ? `<button class="btn" type="button" data-action="file" data-kind="video" data-url="${escapeHTML(video.url)}">Download sebagai video</button>` : ''}
         ${audio ? `<button class="btn" type="button" data-action="file" data-kind="audio" data-url="${escapeHTML(audio.url)}">Unduh MP3</button>` : ''}
       </div>
@@ -160,23 +164,24 @@ function renderPhotoPost(data) {
 
 function renderVideoPost(data) {
   const media = data.downloads.filter((item) => item.kind === 'video' || item.kind === 'audio')
+  const video = data.downloads.find((item) => item.kind === 'video')
+  const poster = isUrl(data.thumbnail) ? escapeHTML(data.thumbnail) : ''
 
-  const thumbnail = isUrl(data.thumbnail)
-    ? `<img class="thumb-img" src="${escapeHTML(data.thumbnail)}" referrerpolicy="no-referrer" alt="Thumbnail video">`
-    : '<div class="thumb"></div>'
+  let player = ''
+  if (video) {
+    player = `<video controls playsinline preload="metadata" referrerpolicy="no-referrer" ${poster ? `poster="${poster}"` : ''} src="${escapeHTML(video.url)}"></video>`
+  } else if (poster) {
+    player = `<img src="${poster}" referrerpolicy="no-referrer" alt="Thumbnail video">`
+  }
 
   result.innerHTML = `
     <div class="box">
-      <div class="result-grid">
-        ${thumbnail}
-        <div>
-          <h2>Video ketemu</h2>
-          ${data.author ? `<p class="owner">${escapeHTML(data.author)}</p>` : ''}
-          <p class="caption">${escapeHTML(data.title)}</p>
-          ${renderStats(data.stats)}
-          <div class="downloads">${media.map((item, index) => fileButton(item, index === 0)).join('')}</div>
-        </div>
-      </div>
+      ${player ? `<div class="player" data-poster="${poster}">${player}</div>` : ''}
+      <h2>Video ketemu</h2>
+      ${data.author ? `<p class="owner">${escapeHTML(data.author)}</p>` : ''}
+      <p class="caption">${escapeHTML(data.title)}</p>
+      ${renderStats(data.stats)}
+      <div class="downloads">${media.map((item, index) => fileButton(item, index === 0)).join('')}</div>
     </div>`
 }
 
@@ -259,6 +264,30 @@ result.addEventListener('click', (event) => {
   }
 })
 
+result.addEventListener('error', (event) => {
+  const video = event.target
+  if (video.tagName !== 'VIDEO') return
+
+  const player = video.closest('.player')
+  const poster = player.dataset.poster
+  player.innerHTML = (poster ? `<img src="${poster}" referrerpolicy="no-referrer" alt="Thumbnail video">` : '') +
+    '<p class="player-note">Video nggak bisa diputar di sini, tapi masih bisa didownload.</p>'
+}, true)
+
+let touchStartX = null
+
+result.addEventListener('touchstart', (event) => {
+  touchStartX = event.target.closest('.slider') ? event.touches[0].clientX : null
+}, { passive: true })
+
+result.addEventListener('touchend', (event) => {
+  if (touchStartX === null || !currentData || !$('slide-image')) return
+
+  const distance = event.changedTouches[0].clientX - touchStartX
+  touchStartX = null
+  if (Math.abs(distance) > 40) showSlide(slideIndex + (distance < 0 ? 1 : -1))
+})
+
 btnGo.addEventListener('click', search)
 $('btn-paste').addEventListener('click', pasteFromClipboard)
 $('btn-reset').addEventListener('click', () => {
@@ -269,3 +298,4 @@ $('btn-reset').addEventListener('click', () => {
 urlInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') search()
 })
+  
