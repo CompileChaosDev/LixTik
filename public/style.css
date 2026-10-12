@@ -696,3 +696,28 @@ a {
   background: var(--card);
   box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
 }
+
+.toast {
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  left: 16px;
+  z-index: 10;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  color: #fff;
+  background: #1d1d1f;
+  border-radius: 14px;
+  font-size: 14px;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity .2s, transform .2s;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: none;
+}

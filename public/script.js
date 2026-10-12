@@ -139,7 +139,30 @@ function fileBase(kind) {
   return `LixTik_${stamp}`
 }
 
-function startDownload(href) {
+let toastTimer = null
+
+function showToast(message) {
+  const toast = $('toast')
+  toast.textContent = message
+  toast.classList.add('show')
+
+  clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 4500)
+}
+
+async function startDownload(href) {
+  try {
+    const check = await fetch(href + '&probe=1')
+
+    if (!check.ok) {
+      const data = await check.json().catch(() => ({}))
+      throw new Error(data.error || 'Server menolak permintaan')
+    }
+  } catch (err) {
+    showToast('Download gagal: ' + err.message)
+    return
+  }
+
   const link = document.createElement('a')
   link.href = href
   link.download = ''
@@ -191,6 +214,8 @@ function showSlide(index) {
   slideIndex = (index + photos.length) % photos.length
 
   const image = $('slide-image')
+  delete image.dataset.retried
+  image.dataset.proxy = proxyUrl(photos[slideIndex].url, 'slide', 'photo') + '&inline=1'
   image.src = photos[slideIndex].url
   image.alt = `Slide ${slideIndex + 1}`
 
@@ -242,7 +267,7 @@ function renderPhotoPost(data) {
       ${data.author ? `<p class="owner">${escapeHTML(data.author)}</p>` : ''}
       <p class="caption">${escapeHTML(data.title)}</p>
       <div class="slider">
-        <img id="slide-image" src="${escapeHTML(photos[0].url)}" referrerpolicy="no-referrer" alt="Slide 1">
+        <img id="slide-image" src="${escapeHTML(photos[0].url)}" data-proxy="${escapeHTML(proxyUrl(photos[0].url, 'slide', 'photo') + '&inline=1')}" referrerpolicy="no-referrer" alt="Slide 1">
         ${controls}
       </div>
       <div class="stack">
@@ -261,7 +286,8 @@ function renderVideoPost(data) {
 
   let player = ''
   if (video) {
-    player = `<video controls playsinline preload="metadata" referrerpolicy="no-referrer" ${poster ? `poster="${poster}"` : ''} src="${escapeHTML(video.url)}"></video>`
+    const proxy = escapeHTML(proxyUrl(video.url, 'play', 'video') + '&inline=1')
+    player = `<video controls playsinline preload="metadata" referrerpolicy="no-referrer" ${poster ? `poster="${poster}"` : ''} data-proxy="${proxy}" src="${escapeHTML(video.url)}"></video>`
   } else if (poster) {
     player = `<img src="${poster}" referrerpolicy="no-referrer" alt="Thumbnail video">`
   }
@@ -366,10 +392,20 @@ result.addEventListener('click', (event) => {
 })
 
 result.addEventListener('error', (event) => {
-  const video = event.target
-  if (video.tagName !== 'VIDEO') return
+  const media = event.target
 
-  const player = video.closest('.player')
+  if (media.tagName !== 'VIDEO' && media.tagName !== 'IMG') return
+
+  if (media.dataset.proxy && !media.dataset.retried) {
+    media.dataset.retried = '1'
+    media.src = media.dataset.proxy
+    if (media.tagName === 'VIDEO') media.load()
+    return
+  }
+
+  if (media.tagName !== 'VIDEO') return
+
+  const player = media.closest('.player')
   const poster = player.dataset.poster
   player.innerHTML = (poster ? `<img src="${poster}" referrerpolicy="no-referrer" alt="Thumbnail video">` : '') +
     '<p class="player-note">Video nggak bisa diputar di sini, tapi masih bisa didownload.</p>'
