@@ -371,11 +371,13 @@ a {
   padding-top: 22px;
   border-top: 1px solid var(--line);
   font-size: 14px;
+  text-align: center;
 }
 
 .footer-links {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 8px 20px;
   margin-bottom: 14px;
 }
@@ -388,6 +390,8 @@ a {
 
 .footer p {
   max-width: 60ch;
+  margin-right: auto;
+  margin-left: auto;
   font-size: 13px;
 }
 
