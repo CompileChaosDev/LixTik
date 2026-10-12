@@ -387,6 +387,13 @@ result.addEventListener('click', (event) => {
   if (action === 'slide') startDownload(proxyUrl(photos[slideIndex].url, `LixTik_${Date.now()}`, 'photo'))
   if (action === 'file') {
     const kind = target.dataset.kind
+
+    if (currentData.directOnly && kind === 'video') {
+      window.open(target.dataset.url, '_blank', 'noopener')
+      showToast('Video dibuka di tab baru. Tekan lama lalu pilih simpan.')
+      return
+    }
+
     startDownload(proxyUrl(target.dataset.url, fileBase(kind), kind))
   }
 })
