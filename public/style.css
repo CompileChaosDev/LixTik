@@ -670,3 +670,29 @@ a {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  width: fit-content;
+  margin: 0 auto 18px;
+  padding: 4px;
+  background: var(--soft);
+  border-radius: 999px;
+}
+
+.tab {
+  padding: 9px 18px;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  font: 600 .9rem var(--font);
+  cursor: pointer;
+}
+
+.tab.active {
+  color: var(--text);
+  background: var(--card);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+}

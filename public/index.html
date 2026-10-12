@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light dark">
-  <title>LixTik - Download TikTok tanpa watermark</title>
+  <title>LixTik - Download video TikTok, Instagram, dan Pinterest</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%279%27 fill=%27%23fe2c55%27/%3E%3Cpath d=%27M16 7.5v12M11 14.8l5 5 5-5M9.5 24.5h13%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272.6%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -34,10 +34,16 @@
 
   <main>
     <header class="hero">
-      <p class="eyebrow">Download TikTok</p>
-      <h1>Simpan video TikTok.<br>Bersih, tanpa watermark.</h1>
-      <p class="subtitle">Tempel link, pilih MP4 atau MP3. Gratis dan tanpa login.</p>
+      <p class="eyebrow" id="hero-eyebrow">Download TikTok</p>
+      <h1 id="hero-title">Simpan video TikTok.<br>Bersih, tanpa watermark.</h1>
+      <p class="subtitle" id="hero-subtitle">Tempel link, pilih MP4 atau MP3. Gratis dan tanpa login.</p>
     </header>
+
+    <div class="tabs" role="tablist" aria-label="Pilih platform">
+      <button class="tab active" type="button" role="tab" aria-selected="true" data-platform="tiktok">TikTok</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-platform="instagram">Instagram</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-platform="pinterest">Pinterest</button>
+    </div>
 
     <section class="search" aria-label="Download video">
       <input id="url-input" type="url" inputmode="url" placeholder="Tempel link TikTok" aria-label="Link TikTok">
@@ -122,6 +128,7 @@
       <h2 class="section-title">Pertanyaan umum</h2>
       <div class="faq">
         <details><summary>Apakah LixTik gratis?</summary><p>Ya, gratis dan tanpa perlu membuat akun.</p></details>
+        <details><summary>Platform apa saja yang didukung?</summary><p>Saat ini TikTok, Instagram (video, reel, dan foto), serta Pinterest (video dan gambar). Pilih tab-nya, atau langsung tempel link dan LixTik mengenalinya.</p></details>
         <details><summary>Perlu pasang aplikasi?</summary><p>Nggak perlu. Cukup buka LixTik di browser HP atau komputer.</p></details>
         <details><summary>Di mana file hasil download tersimpan?</summary><p>Di folder Download untuk Android dan komputer, atau di aplikasi Berkas untuk iPhone.</p></details>
         <details><summary>Kenapa link saya gagal?</summary><p>Pastikan videonya publik, belum dihapus, dan linknya dari tiktok.com. Lalu coba lagi beberapa saat kemudian.</p></details>
