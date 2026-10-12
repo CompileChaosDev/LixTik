@@ -41,7 +41,7 @@ Buka `http://localhost:3000`. Ganti port dengan `PORT=8080 npm start`.
 
 ## Log ke Discord
 
-Setiap pencarian dikirim ke Discord sebagai laporan "LixTik // SYSTEM MONITOR": versi sukses (status 200) dan versi gagal (502 atau 500). IP klien disamarkan (`103.xxx.xxx.21`), dan link TikTok yang dicari tidak ikut dicatat.
+Setiap pencarian dikirim ke Discord sebagai laporan "LixTik // SYSTEM MONITOR": versi sukses (status 200) dan versi gagal (502 atau 500). Laporan memuat alamat IP klien (untuk memantau penyalahgunaan), sedangkan link TikTok yang dicari tidak ikut dicatat.
 
 Isi variabel berikut (lihat `.env.example`):
 
