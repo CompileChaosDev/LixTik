@@ -6,6 +6,14 @@ const result = $('result')
 
 let currentData = null
 let slideIndex = 0
+let loadingTimer = null
+
+const LOADING_STEPS = [
+  'Mengambil data video...',
+  'Mencari link download...',
+  'Menyiapkan file...',
+  'Hampir selesai...'
+]
 
 const EMPTY_STATE = `
   <div class="box">
@@ -38,6 +46,42 @@ function showMessage(title, text, isError = false) {
       <h2>${title}</h2>
       <p>${text}</p>
     </div>`
+}
+
+function stopLoading() {
+  clearInterval(loadingTimer)
+  loadingTimer = null
+}
+
+function showLoading() {
+  stopLoading()
+
+  result.innerHTML = `
+    <div class="box loading" aria-busy="true">
+      <div class="loading-head">
+        <span class="spinner" aria-hidden="true"></span>
+        <div>
+          <h2>Lagi memproses</h2>
+          <p id="loading-text">${LOADING_STEPS[0]}</p>
+        </div>
+      </div>
+      <div class="skeleton skeleton-player"></div>
+      <div class="skeleton skeleton-line"></div>
+      <div class="skeleton skeleton-line short"></div>
+      <div class="skeleton-grid">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+      </div>
+    </div>`
+
+  let step = 0
+  loadingTimer = setInterval(() => {
+    step = Math.min(step + 1, LOADING_STEPS.length - 1)
+    const text = $('loading-text')
+    if (text) text.textContent = LOADING_STEPS[step]
+  }, 3000)
 }
 
 function proxyUrl(url, name, kind) {
@@ -229,15 +273,18 @@ async function search() {
   }
 
   btnGo.disabled = true
+  btnGo.classList.add('is-loading')
   btnGo.textContent = 'Mencari...'
-  showMessage('Lagi memproses...', 'Tunggu sebentar, bisa sampai 25 detik.')
+  showLoading()
 
   try {
     renderResult(await fetchData(url))
   } catch (err) {
     showMessage('Gagal', escapeHTML(err.message) + '.', true)
   } finally {
+    stopLoading()
     btnGo.disabled = false
+    btnGo.classList.remove('is-loading')
     btnGo.textContent = 'Download'
   }
 }
@@ -294,6 +341,7 @@ result.addEventListener('touchend', (event) => {
 btnGo.addEventListener('click', search)
 $('btn-paste').addEventListener('click', pasteFromClipboard)
 $('btn-reset').addEventListener('click', () => {
+  stopLoading()
   urlInput.value = ''
   currentData = null
   result.innerHTML = EMPTY_STATE
@@ -301,4 +349,3 @@ $('btn-reset').addEventListener('click', () => {
 urlInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') search()
 })
-      
