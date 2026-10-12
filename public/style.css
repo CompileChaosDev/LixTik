@@ -573,3 +573,96 @@ a {
   font-size: 12px;
   font-weight: 600;
 }
+
+.loading-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.loading-head h2 {
+  margin-bottom: 2px;
+}
+
+.spinner,
+.btn.is-loading::before {
+  display: inline-block;
+  flex-shrink: 0;
+  border: 3px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+}
+
+.btn.is-loading::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  border-width: 2px;
+  border-color: currentColor;
+  border-right-color: transparent;
+  vertical-align: -2px;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--soft) 25%, var(--line) 50%, var(--soft) 75%);
+  background-size: 200% 100%;
+  border-radius: 12px;
+  animation: skeleton 1.4s ease-in-out infinite;
+}
+
+.skeleton-player {
+  height: clamp(180px, 34vh, 300px);
+  margin-bottom: 18px;
+  border-radius: 18px;
+}
+
+.skeleton-line {
+  height: 14px;
+  margin-bottom: 10px;
+}
+
+.skeleton-line.short {
+  width: 60%;
+}
+
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.skeleton-grid .skeleton {
+  height: 52px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes skeleton {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner,
+  .btn.is-loading::before,
+  .skeleton {
+    animation: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .skeleton-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
