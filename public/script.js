@@ -46,7 +46,16 @@ const PLATFORMS = {
   }
 }
 
-const EXTENSIONS = { 'image/webp': 'webp', 'image/jpeg': 'jpg', 'image/png': 'png', 'image/gif': 'gif' }
+const EXTENSIONS = {
+  'image/webp': 'webp',
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/gif': 'gif',
+  'video/mp4': 'mp4',
+  'video/webm': 'webm',
+  'audio/mpeg': 'mp3',
+  'audio/mp4': 'm4a'
+}
 
 function escapeHTML(text) {
   const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }
@@ -65,11 +74,22 @@ function formatNumber(value) {
   return number.toLocaleString('id-ID', { notation: 'compact', maximumFractionDigits: 1 })
 }
 
-function showMessage(title, text, isError = false) {
+function reportBlock() {
+  if (typeof TELEGRAM_URL === 'undefined' || !TELEGRAM_URL) return ''
+
+  return `
+    <div class="report">
+      <p>Masalah ini berulang? Kabari kami supaya segera diperbaiki.</p>
+      <a class="btn" href="${escapeHTML(TELEGRAM_URL)}" target="_blank" rel="noopener noreferrer">Laporkan ke Telegram</a>
+    </div>`
+}
+
+function showMessage(title, text, isError = false, withReport = false) {
   result.innerHTML = `
     <div class="box ${isError ? 'box-pink' : ''}">
       <h2>${title}</h2>
       <p>${text}</p>
+      ${withReport ? reportBlock() : ''}
     </div>`
 }
 
@@ -150,25 +170,54 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove('show'), 4500)
 }
 
-async function startDownload(href) {
-  try {
-    const check = await fetch(href + '&probe=1')
-
-    if (!check.ok) {
-      const data = await check.json().catch(() => ({}))
-      throw new Error(data.error || 'Server menolak permintaan')
-    }
-  } catch (err) {
-    showToast('Download gagal: ' + err.message)
-    return
-  }
-
+function clickLink(href) {
   const link = document.createElement('a')
   link.href = href
   link.download = ''
   document.body.appendChild(link)
   link.click()
   link.remove()
+}
+
+async function proxyWorks(href) {
+  try {
+    const check = await fetch(href + '&probe=1')
+    return check.ok
+  } catch {
+    return false
+  }
+}
+
+async function saveDirect(url, name) {
+  try {
+    const response = await fetch(url, { referrerPolicy: 'no-referrer' })
+    if (!response.ok) throw new Error('Ditolak')
+
+    const blob = await response.blob()
+    const href = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = href
+    link.download = `${name}.${EXTENSIONS[blob.type] || 'mp4'}`
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    setTimeout(() => URL.revokeObjectURL(href), 10000)
+  } catch {
+    window.open(url, '_blank', 'noopener')
+    showToast('Dibuka di tab baru. Tekan lama lalu pilih simpan.')
+  }
+}
+
+async function saveFile(url, kind) {
+  const name = fileBase(kind)
+  const href = proxyUrl(url, name, kind)
+
+  if (!currentData.directOnly && await proxyWorks(href)) {
+    clickLink(href)
+    return
+  }
+
+  await saveDirect(url, name)
 }
 
 async function downloadZip(button) {
@@ -184,7 +233,8 @@ async function downloadZip(button) {
 
     await Promise.all(photos.map(async (item, index) => {
       const name = `LixTik_${stamp}_${index + 1}`
-      const response = await fetch(proxyUrl(item.url, name, 'photo'))
+      let response = await fetch(proxyUrl(item.url, name, 'photo')).catch(() => null)
+      if (!response || !response.ok) response = await fetch(item.url, { referrerPolicy: 'no-referrer' })
       if (!response.ok) throw new Error('Gagal mengambil foto')
 
       const blob = await response.blob()
@@ -294,7 +344,7 @@ function renderVideoPost(data) {
 
   result.innerHTML = `
     <div class="box">
-      ${player ? `<div class="player" data-poster="${poster}">${player}</div>` : ''}
+      ${player ? `<div class="player" data-poster="${poster}" data-embed="${escapeHTML(data.embedUrl || '')}">${player}</div>` : ''}
       <h2>Video ketemu</h2>
       ${data.author ? `<p class="owner">${escapeHTML(data.author)}</p>` : ''}
       <p class="caption">${escapeHTML(data.title)}</p>
@@ -355,7 +405,7 @@ async function search() {
   try {
     renderResult(await fetchData(url))
   } catch (err) {
-    showMessage('Gagal', escapeHTML(err.message) + '.', true)
+    showMessage('Gagal', escapeHTML(err.message) + '.', true, true)
   } finally {
     stopLoading()
     btnGo.disabled = false
@@ -384,18 +434,8 @@ result.addEventListener('click', (event) => {
   if (action === 'prev') showSlide(slideIndex - 1)
   if (action === 'next') showSlide(slideIndex + 1)
   if (action === 'zip') downloadZip(target)
-  if (action === 'slide') startDownload(proxyUrl(photos[slideIndex].url, `LixTik_${Date.now()}`, 'photo'))
-  if (action === 'file') {
-    const kind = target.dataset.kind
-
-    if (currentData.directOnly && kind === 'video') {
-      window.open(target.dataset.url, '_blank', 'noopener')
-      showToast('Video dibuka di tab baru. Tekan lama lalu pilih simpan.')
-      return
-    }
-
-    startDownload(proxyUrl(target.dataset.url, fileBase(kind), kind))
-  }
+  if (action === 'slide') saveFile(photos[slideIndex].url, 'photo')
+  if (action === 'file') saveFile(target.dataset.url, target.dataset.kind)
 })
 
 result.addEventListener('error', (event) => {
@@ -414,6 +454,13 @@ result.addEventListener('error', (event) => {
 
   const player = media.closest('.player')
   const poster = player.dataset.poster
+
+  if (player.dataset.embed) {
+    player.classList.add('embed')
+    player.innerHTML = `<iframe src="${player.dataset.embed}" title="Video Instagram" loading="lazy" allowfullscreen scrolling="no"></iframe>`
+    return
+  }
+
   player.innerHTML = (poster ? `<img src="${poster}" referrerpolicy="no-referrer" alt="Thumbnail video">` : '') +
     '<p class="player-note">Video nggak bisa diputar di sini, tapi masih bisa didownload.</p>'
 }, true)

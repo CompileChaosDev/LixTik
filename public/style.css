@@ -721,3 +721,30 @@ a {
   opacity: 1;
   transform: none;
 }
+
+.player.embed {
+  height: auto;
+  background: var(--card);
+}
+
+.player iframe {
+  flex: none;
+  width: 100%;
+  height: min(78vh, 640px);
+  border: 0;
+}
+
+.report {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(254, 44, 85, .3);
+}
+
+.report p {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.report .btn {
+  display: inline-block;
+}
