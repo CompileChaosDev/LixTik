@@ -7,13 +7,12 @@ const result = $('result')
 let currentData = null
 let slideIndex = 0
 let loadingTimer = null
-let platform = 'tiktok'
+const platform = document.body.dataset.platform || 'tiktok'
 
 const LOADING_STEPS = [
-  'Mengambil data video...',
-  'Mencari link download...',
-  'Menyiapkan file...',
-  'Hampir selesai...'
+  'Membaca link',
+  'Mencari file video',
+  'Menyiapkan hasil'
 ]
 
 const EMPTY_STATE = `
@@ -22,29 +21,13 @@ const EMPTY_STATE = `
     <p>Paste link di atas, lalu klik Download.</p>
   </div>`
 
-const PLATFORMS = {
-  tiktok: {
-    eyebrow: 'Download TikTok',
-    title: 'Simpan video TikTok.<br>Bersih, tanpa watermark.',
-    subtitle: 'Tempel link, pilih MP4 atau MP3. Gratis dan tanpa login.',
-    placeholder: 'Tempel link TikTok',
-    pattern: /tiktok\.com/i
-  },
-  instagram: {
-    eyebrow: 'Download Instagram',
-    title: 'Simpan video dan foto<br>dari Instagram.',
-    subtitle: 'Tempel link postingan atau reel, lalu pilih file yang mau disimpan.',
-    placeholder: 'Tempel link Instagram',
-    pattern: /instagram\.com/i
-  },
-  pinterest: {
-    eyebrow: 'Download Pinterest',
-    title: 'Simpan video dan gambar<br>dari Pinterest.',
-    subtitle: 'Tempel link pin, lalu simpan videonya atau gambar kualitas aslinya.',
-    placeholder: 'Tempel link Pinterest',
-    pattern: /pinterest\.|pin\.it/i
-  }
+const PATTERNS = {
+  tiktok: /tiktok\.com/i,
+  instagram: /instagram\.com/i,
+  pinterest: /pinterest\.|pin\.it/i
 }
+
+const PAGES = { tiktok: '/', instagram: '/instagram', pinterest: '/pinterest' }
 
 const EXTENSIONS = {
   'image/webp': 'webp',
@@ -98,55 +81,55 @@ function stopLoading() {
   loadingTimer = null
 }
 
+function renderSteps(active) {
+  return LOADING_STEPS.map((label, index) => {
+    const state = index < active ? 'done' : index === active ? 'active' : ''
+    return `<li class="${state}"><span class="dot"></span>${label}</li>`
+  }).join('')
+}
+
 function showLoading() {
   stopLoading()
 
   result.innerHTML = `
     <div class="box loading" aria-busy="true">
-      <div class="loading-head">
-        <span class="spinner" aria-hidden="true"></span>
-        <div>
-          <h2>Lagi memproses</h2>
-          <p id="loading-text">${LOADING_STEPS[0]}</p>
-        </div>
+      <div class="transfer" aria-hidden="true">
+        <span class="node">LINK</span>
+        <span class="track"><i></i><i></i><i></i></span>
+        <span class="node node-file">
+          <svg viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>
+        </span>
       </div>
-      <div class="skeleton skeleton-player"></div>
-      <div class="skeleton skeleton-line"></div>
-      <div class="skeleton skeleton-line short"></div>
-      <div class="skeleton-grid">
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-      </div>
+      <h2>Lagi memproses</h2>
+      <p>Biasanya cuma beberapa detik, kadang sampai 30 detik.</p>
+      <ul class="live-steps" id="live-steps">${renderSteps(0)}</ul>
+      <div class="indeterminate" aria-hidden="true"><span></span></div>
     </div>`
 
   let step = 0
   loadingTimer = setInterval(() => {
     step = Math.min(step + 1, LOADING_STEPS.length - 1)
-    const text = $('loading-text')
-    if (text) text.textContent = LOADING_STEPS[step]
-  }, 3000)
+
+    document.querySelectorAll('#live-steps li').forEach((item, index) => {
+      item.className = index < step ? 'done' : index === step ? 'active' : ''
+    })
+  }, 2800)
 }
 
-function setPlatform(name) {
-  platform = name
-  const config = PLATFORMS[name]
+async function withBusy(button, text, task) {
+  const label = button.textContent
 
-  $('hero-eyebrow').textContent = config.eyebrow
-  $('hero-title').innerHTML = config.title
-  $('hero-subtitle').textContent = config.subtitle
-  urlInput.placeholder = config.placeholder
+  button.disabled = true
+  button.classList.add('is-loading')
+  button.textContent = text
 
-  document.querySelectorAll('.tab').forEach((tab) => {
-    const active = tab.dataset.platform === name
-    tab.classList.toggle('active', active)
-    tab.setAttribute('aria-selected', String(active))
-  })
-}
-
-function detectPlatform(link) {
-  return Object.keys(PLATFORMS).find((name) => PLATFORMS[name].pattern.test(link)) || null
+  try {
+    await task()
+  } finally {
+    button.disabled = false
+    button.classList.remove('is-loading')
+    button.textContent = label
+  }
 }
 
 function proxyUrl(url, name, kind) {
@@ -202,6 +185,7 @@ async function saveDirect(url, name) {
     link.click()
     link.remove()
     setTimeout(() => URL.revokeObjectURL(href), 10000)
+    showToast('Download dimulai. Cek notifikasi unduhan di HP kamu.')
   } catch {
     window.open(url, '_blank', 'noopener')
     showToast('Dibuka di tab baru. Tekan lama lalu pilih simpan.')
@@ -214,6 +198,7 @@ async function saveFile(url, kind) {
 
   if (!currentData.directOnly && await proxyWorks(href)) {
     clickLink(href)
+    showToast('Download dimulai. Cek notifikasi unduhan di HP kamu.')
     return
   }
 
@@ -365,17 +350,23 @@ function renderResult(data) {
 }
 
 async function fetchData(url) {
-  const response = await fetch('/api/download?url=' + encodeURIComponent(url))
+  const response = await fetch('/api/download?url=' + encodeURIComponent(url)).catch(() => null)
+  if (!response) throw new Error('Gagal terhubung ke server. Cek koneksi internetmu')
+
   const text = await response.text()
 
   let data
   try {
     data = JSON.parse(text)
   } catch {
+    if (response.status === 404) {
+      throw new Error('Server /api/download nggak ketemu. Jalankan lewat server.js (npm start) atau deploy ke Vercel')
+    }
+
     throw new Error(
-      response.status === 404
-        ? 'Server /api/download nggak ketemu. Jalankan lewat server.js (npm start) atau deploy ke Vercel'
-        : 'Respons server bukan JSON'
+      response.status === 504 || /timeout/i.test(text)
+        ? 'Server terlalu lama merespons. Coba lagi sebentar lagi'
+        : `Server mengirim balasan tak terduga (kode ${response.status})`
     )
   }
 
@@ -395,7 +386,10 @@ async function search() {
     return
   }
 
-  if (detected !== platform) setPlatform(detected)
+  if (detected !== platform) {
+    goToPlatform(detected, url)
+    return
+  }
 
   btnGo.disabled = true
   btnGo.classList.add('is-loading')
@@ -418,7 +412,7 @@ async function pasteFromClipboard() {
   try {
     urlInput.value = await navigator.clipboard.readText()
     const detected = detectPlatform(urlInput.value)
-    if (detected && detected !== platform) setPlatform(detected)
+    if (detected && detected !== platform) goToPlatform(detected, urlInput.value.trim())
   } catch {
     urlInput.focus()
   }
@@ -434,8 +428,8 @@ result.addEventListener('click', (event) => {
   if (action === 'prev') showSlide(slideIndex - 1)
   if (action === 'next') showSlide(slideIndex + 1)
   if (action === 'zip') downloadZip(target)
-  if (action === 'slide') saveFile(photos[slideIndex].url, 'photo')
-  if (action === 'file') saveFile(target.dataset.url, target.dataset.kind)
+  if (action === 'slide') withBusy(target, 'Menyiapkan...', () => saveFile(photos[slideIndex].url, 'photo'))
+  if (action === 'file') withBusy(target, 'Menyiapkan...', () => saveFile(target.dataset.url, target.dataset.kind))
 })
 
 result.addEventListener('error', (event) => {
@@ -479,18 +473,14 @@ result.addEventListener('touchend', (event) => {
   if (Math.abs(distance) > 40) showSlide(slideIndex + (distance < 0 ? 1 : -1))
 })
 
-document.querySelectorAll('.tab').forEach((tab) => {
-  tab.addEventListener('click', () => {
-    stopLoading()
-    setPlatform(tab.dataset.platform)
-    currentData = null
-    result.innerHTML = EMPTY_STATE
-  })
-})
+urlInput.addEventListener('paste', (event) => {
+  const text = ((event.clipboardData && event.clipboardData.getData('text')) || '').trim()
+  const detected = detectPlatform(text)
 
-urlInput.addEventListener('input', () => {
-  const detected = detectPlatform(urlInput.value)
-  if (detected && detected !== platform) setPlatform(detected)
+  if (detected && detected !== platform) {
+    event.preventDefault()
+    goToPlatform(detected, text)
+  }
 })
 
 btnGo.addEventListener('click', search)
@@ -504,3 +494,10 @@ $('btn-reset').addEventListener('click', () => {
 urlInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') search()
 })
+
+const prefill = new URLSearchParams(window.location.search).get('url')
+
+if (prefill) {
+  urlInput.value = prefill
+  search()
+}

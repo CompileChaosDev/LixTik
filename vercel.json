@@ -1,6 +1,11 @@
 {
+  "cleanUrls": true,
   "functions": {
-    "api/download.js": { "maxDuration": 30 },
-    "api/file.js": { "maxDuration": 60 }
+    "api/download.js": {
+      "maxDuration": 60
+    },
+    "api/file.js": {
+      "maxDuration": 60
+    }
   }
 }

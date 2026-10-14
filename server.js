@@ -5,7 +5,7 @@ const fileHandler = require('./lib/file')
 
 const app = express()
 
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }))
 app.get('/api/download', handler)
 app.get('/api/file', fileHandler)
 
