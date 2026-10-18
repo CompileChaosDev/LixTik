@@ -78,6 +78,20 @@ LX.renderShell = (page) => {
   LX.$('overlay').addEventListener('click', LX.closeMenu)
   document.querySelectorAll('#sidebar .menu-link').forEach((a) => a.addEventListener('click', LX.closeMenu))
 
+  // Muat lebih dulu halaman tujuan saat jari menyentuh menu, supaya pindah halaman terasa cepat.
+  document.querySelectorAll('#sidebar a.menu-link[href^="/"]').forEach((a) => {
+    const warm = () => {
+      const href = a.getAttribute('href')
+      if (document.head.querySelector(`link[rel="prefetch"][href="${href}"]`)) return
+      const hint = document.createElement('link')
+      hint.rel = 'prefetch'
+      hint.href = href
+      document.head.appendChild(hint)
+    }
+    a.addEventListener('touchstart', warm, { passive: true })
+    a.addEventListener('pointerenter', warm)
+  })
+
   document.querySelectorAll('[data-channel]').forEach((a) => {
     const url = LX.config.whatsappUrl
     if (url) {

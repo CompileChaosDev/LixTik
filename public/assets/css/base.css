@@ -119,3 +119,5 @@ svg {
   .sidebar, .overlay, .toast { transition: none; }
 }
 
+/* Pindah halaman: transisi native (Chrome Android) supaya tidak berkedip */
+@view-transition { navigation: auto; }

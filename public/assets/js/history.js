@@ -21,7 +21,7 @@ LX.pages.history = function () {
   }
 
   const render = () => {
-    const all = LX.store.load()
+    const all = LX.store.load().filter((item) => LX.platforms[item.platform])
     const list = filter === 'all' ? all : all.filter((item) => item.platform === filter)
     LX.$('history-clear').hidden = all.length === 0
     filters.hidden = all.length === 0
@@ -38,8 +38,8 @@ LX.pages.history = function () {
     }
 
     box.innerHTML = list.map((item) => {
-      const platform = LX.platforms[item.platform]
-      const icon = LX.icons[item.platform] || LX.icons.download
+      const feature = LX.featureById(item.platform)
+      const icon = LX.icons[(feature && feature.icon) || item.platform] || LX.icons.download
       const thumb = LX.isUrl(item.thumb)
         ? `<img class="thumb-img" src="${LX.escape(item.thumb)}" referrerpolicy="no-referrer" loading="lazy" alt="">`
         : icon
@@ -51,7 +51,7 @@ LX.pages.history = function () {
             <p class="hist-title">${LX.escape(item.title)}</p>
             <div class="hist-meta">
               <span class="tag">${LX.escape(item.label)}</span>
-              <span>${platform ? platform.name : ''}</span>
+              <span>${feature ? feature.title : ''}</span>
               <span>${ago(item.id)}</span>
             </div>
           </div>

@@ -7,8 +7,19 @@
     "api/file.js": {
       "maxDuration": 60
     },
-    "api/fakelobyff.js": {
+    "api/spotify-track.js": {
       "maxDuration": 30
     }
-  }
+  },
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, must-revalidate"
+        }
+      ]
+    }
+  ]
 }

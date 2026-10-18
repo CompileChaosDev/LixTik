@@ -95,13 +95,13 @@ LX.pages.downloader = function () {
   }
 
   function reportBlock() {
-    const whatsapp = LX.config.whatsappUrl
-    if (!whatsapp) return ''
+    const telegram = LX.config.telegramUrl
+    if (!telegram) return ''
 
     return `
       <div class="report">
         <p>Masalah ini berulang? Kabari kami supaya segera diperbaiki.</p>
-        <a class="btn" href="${escapeHTML(whatsapp)}" target="_blank" rel="noopener noreferrer">Laporkan lewat WhatsApp</a>
+        <a class="btn" href="${escapeHTML(telegram)}" target="_blank" rel="noopener noreferrer">Laporkan lewat Telegram</a>
       </div>`
   }
 
@@ -343,7 +343,7 @@ LX.pages.downloader = function () {
     result.innerHTML = `
       <div class="box">
         ${player ? `<div class="player" data-poster="${poster}" data-embed="${escapeHTML(data.embedUrl || '')}">${player}</div>` : ''}
-        <h2>Video ketemu</h2>
+        <h2>${data.downloads.some((item) => item.kind === 'video') ? 'Video' : 'Lagu'} ketemu</h2>
         ${data.author ? `<p class="owner">${escapeHTML(data.author)}</p>` : ''}
         <p class="caption">${escapeHTML(data.title)}</p>
         ${renderStats(data.stats)}
@@ -351,9 +351,95 @@ LX.pages.downloader = function () {
       </div>`
   }
 
+  // ----- Playlist Spotify: daftar lagu, pilih, lalu unduh -----
+  const TRACK_PAGE = 10
+  let trackPage = 0
+  let picked = new Set()
+
+  function safeTitle(text) {
+    return String(text).replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80) || 'Lagu'
+  }
+
+  function renderPlaylist() {
+    const tracks = currentData.tracks
+    const pages = Math.max(1, Math.ceil(tracks.length / TRACK_PAGE))
+    trackPage = Math.min(Math.max(trackPage, 0), pages - 1)
+    const items = tracks.slice(trackPage * TRACK_PAGE, (trackPage + 1) * TRACK_PAGE)
+    const allPicked = picked.size === tracks.length
+
+    result.innerHTML = `
+      <div class="box">
+        <h2>${escapeHTML(currentData.title)}</h2>
+        <p>${tracks.length} lagu${currentData.author ? ' · ' + escapeHTML(currentData.author) : ''}</p>
+        <div class="stack">
+          <button class="btn" type="button" data-action="tall">${allPicked ? 'Batal pilih semua' : 'Pilih semua'}</button>
+        </div>
+        <ul class="track-list">
+          ${items.map((t) => `
+            <li class="track">
+              <label>
+                <input type="checkbox" data-track="${t.index}" ${picked.has(t.index) ? 'checked' : ''}>
+                <span class="track-name">${escapeHTML(t.title)}</span>
+                ${t.artist ? `<small>${escapeHTML(t.artist)}</small>` : ''}
+              </label>
+            </li>`).join('')}
+        </ul>
+        <div class="pager">
+          <button class="btn btn-small" type="button" data-action="tprev" aria-label="Halaman sebelumnya" ${trackPage === 0 ? 'disabled' : ''}>&#8249;</button>
+          <span>Halaman ${trackPage + 1} / ${pages}</span>
+          <button class="btn btn-small" type="button" data-action="tnext" aria-label="Halaman berikutnya" ${trackPage >= pages - 1 ? 'disabled' : ''}>&#8250;</button>
+        </div>
+        <button class="btn btn-primary" type="button" data-action="tbatch" ${picked.size ? '' : 'disabled'}>Download yang dipilih (${picked.size})</button>
+      </div>`
+  }
+
+  async function saveTrack(url, name) {
+    const href = proxyUrl(url, name, 'audio')
+    if (await proxyWorks(href)) {
+      clickLink(href)
+      return
+    }
+    await saveDirect(url, name)
+  }
+
+  async function downloadPicked(button) {
+    const list = currentData.tracks.filter((t) => picked.has(t.index))
+    if (list.length === 0) return
+
+    button.disabled = true
+    let ok = 0
+    let fail = 0
+
+    for (let i = 0; i < list.length; i++) {
+      const track = list[i]
+      showToast(`Mengunduh ${i + 1} dari ${list.length}...`)
+      try {
+        const response = await fetch(`/api/spotify-track?id=${encodeURIComponent(track.id)}`)
+        const data = await response.json().catch(() => ({}))
+        if (!response.ok || !data.url) throw new Error('gagal')
+        await saveTrack(data.url, safeTitle(track.artist ? `${track.artist} - ${track.title}` : track.title))
+        recordHistory('MP3')
+        ok += 1
+      } catch (err) {
+        fail += 1
+      }
+      if (i < list.length - 1) await new Promise((r) => setTimeout(r, 900))
+    }
+
+    button.disabled = false
+    showToast(`Selesai: ${ok} berhasil${fail ? `, ${fail} gagal` : ''}.`)
+  }
+
   function renderResult(data) {
     currentData = data
     slideIndex = 0
+
+    if (Array.isArray(data.tracks) && data.tracks.length > 0) {
+      trackPage = 0
+      picked = new Set()
+      renderPlaylist()
+      return
+    }
 
     if (data.downloads.some((item) => item.kind === 'photo')) {
       renderPhotoPost(data)
@@ -445,6 +531,22 @@ LX.pages.downloader = function () {
     if (action === 'zip') downloadZip(target)
     if (action === 'slide') saveFile(photos[slideIndex].url, 'photo')
     if (action === 'file') saveFile(target.dataset.url, target.dataset.kind)
+    if (action === 'tprev') { trackPage -= 1; renderPlaylist() }
+    if (action === 'tnext') { trackPage += 1; renderPlaylist() }
+    if (action === 'tall') {
+      picked = picked.size === currentData.tracks.length ? new Set() : new Set(currentData.tracks.map((t) => t.index))
+      renderPlaylist()
+    }
+    if (action === 'tbatch') downloadPicked(target)
+  })
+
+  result.addEventListener('change', (event) => {
+    const box = event.target
+    if (!box.matches || !box.matches('input[data-track]') || !currentData || !currentData.tracks) return
+    const index = Number(box.dataset.track)
+    if (box.checked) picked.add(index)
+    else picked.delete(index)
+    renderPlaylist()
   })
 
   // Media gagal dimuat: coba lewat proxy, lalu embed, lalu thumbnail.

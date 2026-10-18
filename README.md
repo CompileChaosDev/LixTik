@@ -147,7 +147,7 @@ Halaman downloader, Panduan, filter History, dan deteksi "link ini milik platfor
 
 Tambah `hidden: true` pada entrinya di `features.js`. Kartu dan menunya hilang, file halamannya tetap ada.
 
-Link channel WhatsApp diisi di `assets/js/config.js` (`whatsappUrl`).
+Link channel WhatsApp (menu samping) diisi di `assets/js/config.js` (`whatsappUrl`). Link laporan error memakai `telegramUrl` di file yang sama.
 
 ## Troubleshooting
 

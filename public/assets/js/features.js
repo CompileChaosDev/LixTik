@@ -7,7 +7,6 @@ window.LX = window.LX || {}
 // Kelompok di homepage dan menu. Urutan di sini = urutan tampil.
 LX.groups = [
   { id: 'downloader', title: 'Downloader', desc: 'Simpan video dan foto dari media sosial.' },
-  { id: 'market', title: 'Market', desc: 'Fitur tambahan dan layanan.' },
   { id: 'lainnya', title: 'Lainnya', desc: 'Riwayat dan bantuan.' }
   // { id: 'alat', title: 'Alat', desc: 'Kumpulan alat bantu.' },
 ]
@@ -50,9 +49,6 @@ LX.features = [
     desc: 'Ambil file dari link TeraBox yang dibagikan publik.', path: '/terabox', icon: 'terabox', color: '#2563eb' },
   { id: 'threads', group: 'downloader', title: 'Threads', pageTitle: 'Threads Downloader',
     desc: 'Simpan video dan gambar dari postingan Threads.', path: '/threads', icon: 'threads', color: '#1f2937' },
-
-  { id: 'fakelobyff', group: 'market', title: 'Fake Lobby FF', pageTitle: 'Fake Lobby Free Fire',
-    desc: 'Buat gambar lobby Free Fire dengan nickname kamu.', path: '/fakelobyff', icon: 'grid', color: '#f59e0b' },
 
   { id: 'history', group: 'lainnya', title: 'History', pageTitle: 'History',
     desc: 'Daftar yang pernah kamu download.', path: '/history', icon: 'clock', color: '#93c5fd' },
