@@ -9,6 +9,9 @@
     },
     "api/spotify-track.js": {
       "maxDuration": 30
+    },
+    "api/spotify-cover.js": {
+      "maxDuration": 30
     }
   },
   "headers": [

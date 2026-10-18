@@ -187,3 +187,7 @@
 .track-name { font-weight: 500; overflow-wrap: anywhere; }
 .track small { color: var(--muted); overflow-wrap: anywhere; }
 .pager { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 12px 0; font-size: 14px; }
+.playlist-head { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 14px; }
+.playlist-head .playlist-cover { width: min(64vw, 200px); height: min(64vw, 200px); margin: 0 auto 14px; }
+.playlist-head h2 { margin: 0; }
+.playlist-head p { margin: 4px 0 0; }

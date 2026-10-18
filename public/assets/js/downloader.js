@@ -374,9 +374,11 @@ LX.pages.downloader = function () {
 
     result.innerHTML = `
       <div class="box">
-        ${currentData.coverSrc ? `<img class="playlist-cover" src="${escapeHTML(currentData.coverSrc)}" alt="Cover ${escapeHTML(currentData.title)}" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+        <div class="playlist-head">
+        ${currentData.coverSrc ? `<img class="playlist-cover" src="${escapeHTML(currentData.coverSrc)}" alt="Cover ${escapeHTML(currentData.title)}" referrerpolicy="no-referrer" data-fallback="${escapeHTML(coverSrcFor(currentData.tracks[0]))}" onerror="if(!this.dataset.tried){this.dataset.tried=1;this.src=this.dataset.fallback}else{this.remove()}">` : ''}
         <h2>${escapeHTML(currentData.title)}</h2>
         <p>${tracks.length} lagu${currentData.author ? ' · ' + escapeHTML(currentData.author) : ''}</p>
+        </div>
         <div class="stack">
           <button class="btn" type="button" data-action="tall">${allPicked ? 'Batal pilih semua' : 'Pilih semua'}</button>
         </div>
@@ -386,7 +388,7 @@ LX.pages.downloader = function () {
               <button class="track-main" type="button" data-action="tpick" data-track-index="${t.index}" aria-pressed="${picked.has(t.index) ? 'true' : 'false'}">
                 <span class="track-cover-wrap" aria-hidden="true">
                   <svg class="track-cover-fallback" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>
-                  <img class="track-cover" src="${escapeHTML(isUrl(t.thumbnail) ? t.thumbnail : coverSrcFor(t))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
+                  <img class="track-cover" src="${escapeHTML(coverSrcFor(t))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
                 </span>
                 <span class="track-text">
                   <span class="track-name">${escapeHTML(t.title)}</span>
