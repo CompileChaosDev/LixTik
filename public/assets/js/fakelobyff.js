@@ -3,7 +3,9 @@ LX.pages.fakelobyff = function () {
   const $ = LX.$
   const feature = LX.featureById('fakelobyff')
   const MAX = 30
+  const TIMEOUT_MS = 45000
   let objectUrl = null
+  let busy = false
 
   $('page').innerHTML = `
     <div class="page-head">
@@ -16,8 +18,8 @@ LX.pages.fakelobyff = function () {
       <input id="nick-input" type="text" autocomplete="off" maxlength="${MAX}" placeholder="Contoh: Malix">
       <p class="hint">Maksimal ${MAX} karakter.</p>
       <div class="actions">
-        <button class="btn btn-primary" id="btn-make" type="button">Buat</button>
-        <button class="btn" id="btn-clear" type="button">Reset</button>
+        <button class="btn btn-primary" id="btn-make" type="button" data-action="make">Buat</button>
+        <button class="btn" id="btn-clear" type="button" data-action="clear">Reset</button>
       </div>
     </section>
 
@@ -69,22 +71,43 @@ LX.pages.fakelobyff = function () {
     objectUrl = null
   }
 
+  const fileName = (nickname) =>
+    `fake-lobby-${nickname.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'ff'}.png`
+
+  // Simpan gambar lewat link sementara, bukan navigasi halaman.
+  const saveImage = (name) => {
+    if (!objectUrl) return
+    const link = document.createElement('a')
+    link.href = objectUrl
+    link.download = name || 'fake-lobby-ff.png'
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+  }
+
   const show = (blob, nickname) => {
     releaseUrl()
     objectUrl = URL.createObjectURL(blob)
-    const file = `fake-lobby-${nickname.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'ff'}.png`
     result.innerHTML = `
       <div class="box">
         <h2>Fake Lobby FF</h2>
         <p>Nickname: ${LX.escape(nickname)}</p>
         <img src="${objectUrl}" alt="Fake Lobby FF ${LX.escape(nickname)}" style="display:block;width:100%;height:auto;border-radius:16px;margin:12px 0;">
         <div class="stack">
-          <a class="btn btn-primary" href="${objectUrl}" download="${file}">Download Photo</a>
+          <button class="btn btn-primary" type="button" data-action="save" data-name="${fileName(nickname)}">Download Photo</button>
         </div>
       </div>`
   }
 
+  const setBusy = (on) => {
+    busy = on
+    btnMake.disabled = on
+    btnMake.classList.toggle('is-loading', on)
+    btnMake.textContent = on ? 'Membuat...' : 'Buat'
+  }
+
   const make = async () => {
+    if (busy) return
     const nickname = input.value.replace(/\s+/g, ' ').trim()
     if (!nickname) {
       message('Belum diisi', 'Tulis nickname dulu sebelum membuat.', true)
@@ -96,36 +119,47 @@ LX.pages.fakelobyff = function () {
       return
     }
 
-    btnMake.disabled = true
-    btnMake.classList.add('is-loading')
-    btnMake.textContent = 'Membuat...'
+    setBusy(true)
     loading()
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
 
     try {
-      const response = await fetch(`/api/fakelobyff?nickname=${encodeURIComponent(nickname)}`)
+      const response = await fetch(`/api/fakelobyff?nickname=${encodeURIComponent(nickname)}`, { signal: controller.signal })
       if (!response.ok) {
         let text = 'Gagal membuat Fake Lobby FF. Coba lagi sebentar lagi.'
         try { text = (await response.json()).error || text } catch (err) {}
         throw new Error(text)
       }
+      const type = response.headers.get('content-type') || ''
+      if (!type.startsWith('image/')) throw new Error('Respons server bukan gambar. Coba lagi sebentar lagi.')
       show(await response.blob(), nickname)
     } catch (err) {
-      message('Gagal', err.message || 'Gagal membuat Fake Lobby FF.', true)
+      const timedOut = err.name === 'AbortError'
+      message('Gagal', timedOut ? 'Waktunya habis. Coba lagi sebentar lagi.' : (err.message || 'Gagal membuat Fake Lobby FF.'), true)
     } finally {
-      btnMake.disabled = false
-      btnMake.classList.remove('is-loading')
-      btnMake.textContent = 'Buat'
+      clearTimeout(timer)
+      setBusy(false)
     }
   }
 
-  btnMake.addEventListener('click', make)
-  input.addEventListener('keydown', (event) => { if (event.key === 'Enter') make() })
-  $('btn-clear').addEventListener('click', () => {
+  const clear = () => {
     input.value = ''
     releaseUrl()
     result.innerHTML = EMPTY
     input.focus()
+  }
+
+  // Satu pendengar di #page: tombol di dalam hasil tetap jalan walau hasilnya diganti.
+  $('page').addEventListener('click', (event) => {
+    const button = event.target.closest('[data-action]')
+    if (!button) return
+    const action = button.dataset.action
+    if (action === 'make') make()
+    else if (action === 'clear') clear()
+    else if (action === 'save') saveImage(button.dataset.name)
   })
+  input.addEventListener('keydown', (event) => { if (event.key === 'Enter') make() })
 
   result.innerHTML = EMPTY
 }
