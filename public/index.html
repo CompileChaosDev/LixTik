@@ -4,140 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light dark">
-  <title>LixTik - Download video TikTok tanpa watermark</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%279%27 fill=%27%232563ff%27/%3E%3Cpath d=%27M16 7.5v12M11 14.8l5 5 5-5M9.5 24.5h13%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272.6%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#2563eb">
+  <title>LixTik - Semua fitur dalam satu tempat</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%279%27 fill=%27%232563eb%27/%3E%3Cpath d=%27M16 7.5v12M11 14.8l5 5 5-5M9.5 24.5h13%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272.6%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/layout.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/pages.css">
+  <link rel="stylesheet" href="/assets/css/home.css">
 </head>
-<body data-platform="tiktok">
-  <nav class="nav">
-    <a class="brand" href="./">
-      <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
-        <defs>
-          <linearGradient id="lixtik-grad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#2563ff"/>
-            <stop offset="1" stop-color="#5b8cff"/>
-          </linearGradient>
-        </defs>
-        <rect width="32" height="32" rx="9" fill="url(#lixtik-grad)"/>
-        <path d="M16 7.5v12M11 14.8l5 5 5-5M9.5 24.5h13" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span class="wordmark">LixTik</span>
-    </a>
-  </nav>
-
-  <main>
-    <header class="hero">
-      <h1>Download TikTok</h1>
-      <p class="subtitle">Tempel link, pilih MP4 atau MP3. Gratis dan tanpa login.</p>
-    </header>
-
-    <section class="search" aria-label="Download">
-      <input id="url-input" type="url" inputmode="url" placeholder="Tempel link TikTok" aria-label="Link TikTok">
-      <div class="actions">
-        <button class="btn btn-dark" id="btn-go" type="button">Download</button>
-        <button class="btn" id="btn-paste" type="button">Paste</button>
-        <button class="btn" id="btn-reset" type="button">Reset</button>
-      </div>
-    </section>
-
-    <div id="result" aria-live="polite">
-      <div class="box">
-        <h2>Belum ada link</h2>
-        <p>Paste link di atas, lalu klik Download.</p>
-      </div>
-    </div>
-
-    <section class="section" id="fitur">
-      <h2 class="section-title">Kenapa pakai LixTik</h2>
-      <div class="cards">
-        <div class="card"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><h3>Tanpa watermark</h3><p>Simpan video bersih tanpa logo TikTok di pojoknya.</p></div>
-        <div class="card"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></span><h3>Cepat</h3><p>Tempel link, hasilnya muncul dalam hitungan detik.</p></div>
-        <div class="card"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.5v5l4.5-2.5z"/></svg></span><h3>Kualitas HD</h3><p>Pilih versi HD kalau video aslinya mendukung.</p></div>
-        <div class="card"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></span><h3>Ambil MP3</h3><p>Suara video bisa disimpan terpisah untuk backsound.</p></div>
-        <div class="card"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg></span><h3>Foto dan slideshow</h3><p>Postingan foto bisa diunduh satu per satu atau sekaligus dalam ZIP.</p></div>
-        <div class="card"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="13" height="10" rx="2"/><path d="M8 18h3M9.5 14v4"/><rect x="17" y="9" width="4" height="9" rx="1.2"/></svg></span><h3>Semua perangkat</h3><p>Jalan di browser HP maupun komputer, tanpa pasang aplikasi.</p></div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2 class="section-title">Cara download</h2>
-      <div class="columns">
-        <div class="item">
-          <span class="num">1</span>
-          <h3>Salin link</h3>
-          <p>Di TikTok, ketuk Bagikan lalu Salin tautan.</p>
+<body data-page="home" data-kind="home">
+  <div id="shell"></div>
+  <main class="main">
+      <div class="hero">
+        <div class="hero-text">
+          <p class="hero-hi">Selamat datang di</p>
+          <h1>LixTik</h1>
+          <p class="hero-line">Pilih fitur di bawah untuk mulai.</p>
         </div>
-        <div class="item">
-          <span class="num">2</span>
-          <h3>Tempel di LixTik</h3>
-          <p>Taruh di kolom paling atas, lalu ketuk Download.</p>
-        </div>
-        <div class="item">
-          <span class="num">3</span>
-          <h3>Simpan filenya</h3>
-          <p>Pilih tombol download, lalu file langsung terunduh.</p>
-        </div>
+        <a class="hero-go" href="#hub" aria-label="Lihat semua fitur">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>
+        </a>
       </div>
-    </section>
 
-    <section class="section" id="panduan">
-      <h2 class="section-title">Panduan per perangkat</h2>
-      <div class="cards cards-3">
-        <div class="card">
-          <h3>Android</h3>
-          <ol>
-            <li>Di TikTok, ketuk Bagikan lalu Salin tautan.</li>
-            <li>Buka LixTik di Chrome, tempel link, ketuk Download.</li>
-            <li>Ketuk tombol download. File masuk ke folder Download atau Galeri.</li>
-          </ol>
-        </div>
-        <div class="card">
-          <h3>iPhone</h3>
-          <ol>
-            <li>Salin tautan dari TikTok.</li>
-            <li>Buka LixTik di Safari dan tempel link-nya.</li>
-            <li>Ketuk tombol download, pilih Unduh, lalu cek di aplikasi Berkas.</li>
-          </ol>
-        </div>
-        <div class="card">
-          <h3>Komputer</h3>
-          <ol>
-            <li>Salin alamat halaman dari browser.</li>
-            <li>Tempel di LixTik lalu klik Download.</li>
-            <li>Klik tombol download. File tersimpan di folder Downloads.</li>
-          </ol>
-        </div>
-      </div>
-    </section>
+      <div id="hub"></div>
 
-    <section class="section" id="faq">
-      <h2 class="section-title">Pertanyaan umum</h2>
-      <div class="faq">
-        <details><summary>Apakah LixTik gratis?</summary><p>Ya, gratis dan tanpa perlu membuat akun.</p></details>
-        <details><summary>Perlu pasang aplikasi?</summary><p>Nggak perlu. Cukup buka LixTik di browser HP atau komputer.</p></details>
-        <details><summary>Di mana file hasil download tersimpan?</summary><p>Di folder Download untuk Android dan komputer, atau di aplikasi Berkas untuk iPhone.</p></details>
-        <details><summary>Kenapa link saya gagal?</summary><p>Pastikan videonya publik, belum dihapus, dan linknya dari tiktok.com. Lalu coba lagi beberapa saat kemudian.</p></details>
-        <details><summary>Bisa download video yang dikunci atau pribadi?</summary><p>Nggak bisa. Hanya konten publik yang bisa diunduh.</p></details>
-        <details><summary>Bisa download postingan foto?</summary><p>Bisa. Foto tampil sebagai slider, lalu pilih unduh satu foto atau semuanya dalam ZIP.</p></details>
-        <details><summary>Kenapa tombol MP3 kadang nggak ada?</summary><p>Nggak semua video menyediakan audio terpisah. Kalau tersedia, tombolnya otomatis muncul.</p></details>
-      </div>
-    </section>
-
-    <footer class="footer">
-      <p class="copy">&copy; 2026 LixTik</p>
-    </footer>
-  </main>
-
-  <nav class="dock" aria-label="Menu utama">
-    <a href="/" class="active" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg><span>TikTok</span></a><a href="/instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor"/></svg><span>Instagram</span></a><a href="/pinterest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 20V5h5a4.2 4.2 0 010 8.4H9"/></svg><span>Pinterest</span></a><a href="#faq"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 114 2c-.9.6-1.5 1.1-1.5 2.2M12 17h.01"/></svg><span>Bantuan</span></a>
-  </nav>
-
+      <footer class="footer"><p>&copy; 2026 LixTik</p></footer>
+    </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="config.js"></script>
-  <script src="script.js"></script>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/icons.js"></script>
+  <script src="/assets/js/features.js"></script>
+  <script src="/assets/js/platforms.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/assets/js/shell.js"></script>
+  <script src="/assets/js/home.js"></script>
 </body>
 </html>

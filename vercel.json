@@ -2,10 +2,13 @@
   "cleanUrls": true,
   "functions": {
     "api/download.js": {
-      "maxDuration": 60
+      "maxDuration": 30
     },
     "api/file.js": {
       "maxDuration": 60
+    },
+    "api/fakelobyff.js": {
+      "maxDuration": 30
     }
   }
 }

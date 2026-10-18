@@ -1,0 +1,158 @@
+/* home.css: homepage (tema biru gelap, kaca) dan kartu fitur. */
+body.home-neon {
+  --bg: #020b1f;
+  --card: rgba(8, 26, 70, .55);
+  --soft: rgba(96, 165, 250, .12);
+  --line: rgba(96, 165, 250, .3);
+  --text: #ffffff;
+  --muted: #a9c2ee;
+  --accent: #4f9dff;
+  --accent-soft: rgba(79, 157, 255, .2);
+  --shadow: none;
+  background: #020b1f;
+}
+
+/* cahaya biru di latar */
+body.home-neon::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 26% at 0% 100%, rgba(37, 99, 235, .6), transparent 70%),
+    radial-gradient(60% 22% at 100% 96%, rgba(59, 130, 246, .5), transparent 70%),
+    radial-gradient(50% 30% at 0% 42%, rgba(37, 99, 235, .25), transparent 70%);
+}
+
+body.home-neon::after {
+  content: '';
+  position: fixed;
+  left: -24%;
+  bottom: -4%;
+  z-index: -1;
+  width: 80%;
+  height: 26%;
+  pointer-events: none;
+  opacity: .65;
+  background: linear-gradient(100deg, transparent 40%, rgba(130, 185, 255, .6) 50%, transparent 60%);
+  transform: rotate(-36deg);
+}
+
+.home-neon .sidebar { background: #06122b; }
+.home-neon .sidebar-foot { background: rgba(96, 165, 250, .1); }
+.home-neon .footer p { color: var(--muted); }
+
+/* bar atas melayang seperti kaca */
+.home-neon .topbar {
+  position: fixed;
+  top: calc(10px + env(safe-area-inset-top, 0px));
+  right: 14px;
+  left: 14px;
+  padding: 9px 10px 9px 12px;
+  background: rgba(5, 22, 64, .55);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(100, 165, 255, .55);
+  border-radius: 22px;
+  box-shadow: 0 0 24px rgba(37, 99, 235, .35), inset 0 0 18px rgba(70, 135, 255, .14);
+}
+
+.home-neon .wordmark { color: #fff; font-size: 1.15rem; font-weight: 600; }
+.home-neon .icon-btn { color: #fff; background: rgba(2, 14, 44, .7); border: 1px solid rgba(100, 165, 255, .4); border-radius: 14px; }
+.home-neon .main { padding-top: 0; }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  min-height: 258px;
+  margin: 0 -18px 16px;
+  padding: 112px 22px 22px;
+  background:
+    linear-gradient(90deg, rgba(2, 11, 31, .85) 0%, rgba(2, 11, 31, .45) 45%, rgba(2, 11, 31, 0) 75%),
+    linear-gradient(180deg, rgba(2, 11, 31, .3) 0%, rgba(2, 11, 31, 0) 32%, rgba(2, 11, 31, .15) 68%, #020b1f 100%),
+    url(/assets/img/hero.jpg) 80% 0 / cover no-repeat;
+}
+
+.hero-text { position: relative; max-width: 62%; }
+.hero-hi { color: #d3e3ff; font-size: .95rem; }
+.hero h1 {
+  margin: 0;
+  font-size: 3.1rem;
+  font-style: italic;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  text-shadow: 0 0 22px rgba(90, 160, 255, .9), 0 0 4px rgba(255, 255, 255, .6);
+}
+.hero-line { margin-top: 2px; color: #d3e3ff; font-size: .9rem; }
+
+.hero-go {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  color: #fff;
+  background: rgba(2, 20, 62, .65);
+  border: 3px solid #3b9cff;
+  border-radius: 50%;
+  box-shadow: 0 0 22px rgba(59, 156, 255, .8), inset 0 0 14px rgba(59, 156, 255, .5);
+}
+
+.hero-go svg { width: 28px; height: 28px; stroke-width: 2.2; }
+
+/* ---------- Kartu fitur ---------- */
+.hub-group { margin-bottom: 26px; }
+
+.hub-head { margin-bottom: 12px; }
+.hub-head h2 { color: #cfe0ff; font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+
+.hub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.hub-grid .hub-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+.hub-card {
+  --cc: #60a5fa;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 16px;
+  color: var(--text);
+  text-decoration: none;
+  background: var(--card);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  transition: border-color .15s, transform .15s, box-shadow .15s;
+}
+
+.hub-card:hover { border-color: rgba(130, 185, 255, .8); box-shadow: 0 0 20px rgba(59, 130, 246, .3); }
+.hub-card:active { transform: scale(.98); }
+
+.s-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 8px;
+  color: #fff;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--cc) 85%, #fff), color-mix(in srgb, var(--cc) 55%, #0a2a8a));
+  border-radius: 13px;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--cc) 45%, transparent);
+}
+
+.s-icon svg { width: 22px; height: 22px; }
+.hub-card h3 { margin: 0; font-size: .98rem; font-weight: 600; }
+.hub-card p { color: #b6cbef; font-size: 12.5px; line-height: 1.5; }
+.hub-card .tag { margin-top: 6px; }
+.hub-card.soon { opacity: .55; border-style: dashed; }
+
+@media (min-width: 1024px) {
+  .home-neon .main { padding-top: 40px; }
+  .hero { margin: 0 0 20px; min-height: 340px; border-radius: 26px; background-position: 60% 20%; }
+  .home-neon::before, .home-neon::after { left: var(--side); }
+}

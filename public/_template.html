@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+  TEMPLATE HALAMAN FITUR BARU.
+  1. Salin file ini jadi public/namafitur.html
+  2. Ganti data-page (harus sama dengan id di assets/js/features.js) dan <title>
+  3. Isi <main> dengan tampilan fitur, atau buat assets/js/namafitur.js
+     yang mengisi LX.pages.namafitur = function () { ... } lalu muat di bawah.
+  File berawalan "_" ini hanya contoh dan tidak ditautkan dari mana pun.
+-->
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb">
+  <title>Nama Fitur - LixTik</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/layout.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/pages.css">
+  <link rel="stylesheet" href="/assets/css/home.css">
+</head>
+<body data-page="namafitur" data-kind="namafitur">
+  <div id="shell"></div>
+
+  <main class="main">
+    <div class="page-head">
+      <h1>Nama Fitur</h1>
+      <p>Penjelasan singkat fitur ini.</p>
+    </div>
+
+    <section class="search">
+      <p>Isi fitur di sini.</p>
+    </section>
+
+    <footer class="footer"><p>&copy; 2026 LixTik</p></footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/icons.js"></script>
+  <script src="/assets/js/features.js"></script>
+  <script src="/assets/js/platforms.js"></script>
+  <script src="/assets/js/store.js"></script>
+  <script src="/assets/js/shell.js"></script>
+  <!-- <script src="/assets/js/namafitur.js"></script> -->
+</body>
+</html>

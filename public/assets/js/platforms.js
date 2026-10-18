@@ -1,0 +1,266 @@
+// Pengaturan khusus fitur downloader. Satu entri per platform.
+// Kunci (tiktok, instagram, ...) harus sama dengan id di features.js.
+window.LX = window.LX || {}
+
+LX.platforms = {
+  tiktok: {
+    name: 'TikTok',
+    title: 'TikTok Downloader',
+    subtitle: 'Simpan video TikTok tanpa watermark, atau ambil suaranya saja.',
+    hint: 'Hasil tanpa watermark. Pilih MP4 atau MP3.',
+    placeholder: 'Tempel link TikTok',
+    pattern: /tiktok\.com/i,
+    path: '/tiktok',
+    steps: [
+      'Buka videonya di TikTok, ketuk <b>Bagikan</b>, lalu <b>Salin tautan</b>.',
+      'Tempel linknya di kolom di atas (atau ketuk <b>Paste</b>).',
+      'Ketuk <b>Download</b> dan tunggu beberapa detik sampai hasilnya muncul.',
+      'Pilih <b>MP4</b> untuk video tanpa watermark (pilih HD kalau ada), atau <b>MP3</b> untuk suaranya saja.'
+    ],
+    note: 'Postingan foto tampil sebagai slider. Geser, lalu simpan satu foto atau semuanya dalam ZIP.'
+  },
+  instagram: {
+    name: 'Instagram',
+    title: 'Instagram Downloader',
+    subtitle: 'Simpan reel, video, dan foto dari postingan Instagram.',
+    hint: 'Untuk postingan dan reel dari akun publik.',
+    placeholder: 'Tempel link Instagram',
+    pattern: /instagram\.com/i,
+    path: '/instagram',
+    steps: [
+      'Buka postingan atau reel dari akun yang <b>tidak dikunci</b>. Ketuk ikon kirim atau titik tiga, lalu <b>Salin link</b>.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih video atau foto yang mau disimpan.'
+    ],
+    note: 'Postingan dengan banyak foto tampil sebagai slider, sama seperti TikTok.'
+  },
+  pinterest: {
+    name: 'Pinterest',
+    title: 'Pinterest Downloader',
+    subtitle: 'Simpan video dan gambar kualitas asli dari Pinterest.',
+    hint: 'Link pendek pin.it juga bisa.',
+    placeholder: 'Tempel link Pinterest',
+    pattern: /pinterest\.|pin\.it/i,
+    path: '/pinterest',
+    steps: [
+      'Buka pin-nya, ketuk <b>Bagikan</b>, lalu <b>Salin link</b>.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Simpan videonya atau gambar kualitas aslinya.'
+    ],
+    note: ''
+  },
+  youtube: {
+    name: 'YouTube',
+    title: 'YouTube Downloader',
+    subtitle: 'Simpan video atau audio dari YouTube.',
+    hint: 'Video publik. Link youtu.be juga bisa.',
+    placeholder: 'Tempel link YouTube',
+    pattern: /youtube\.com|youtu\.be/i,
+    path: '/youtube',
+    steps: [
+      'Buka postingan atau halamannya di YouTube, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'Video panjang butuh waktu lebih lama. Kalau gagal, coba lagi beberapa saat kemudian.'
+  },
+  twitter: {
+    name: 'Twitter / X',
+    title: 'Twitter / X Downloader',
+    subtitle: 'Simpan video dan gambar dari postingan Twitter atau X.',
+    hint: 'Untuk postingan publik.',
+    placeholder: 'Tempel link Twitter atau X',
+    pattern: /(^|[\/.])(twitter|x)\.com/i,
+    path: '/twitter',
+    steps: [
+      'Buka postingan atau halamannya di Twitter / X, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'Postingan yang hanya berisi teks tidak punya media untuk diunduh.'
+  },
+  facebook: {
+    name: 'Facebook',
+    title: 'Facebook Downloader',
+    subtitle: 'Simpan video dari postingan Facebook.',
+    hint: 'Untuk video dan Reel publik. Link fb.watch juga bisa.',
+    placeholder: 'Tempel link Facebook',
+    pattern: /facebook\.com|fb\.watch/i,
+    path: '/facebook',
+    steps: [
+      'Buka postingan atau halamannya di Facebook, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'Video dari grup atau akun yang dikunci tidak bisa diunduh.'
+  },
+  spotify: {
+    name: 'Spotify',
+    title: 'Spotify Downloader',
+    subtitle: 'Ambil audio lagu, album, atau playlist Spotify.',
+    hint: 'Hasilnya berupa MP3.',
+    placeholder: 'Tempel link Spotify',
+    pattern: /spotify\.com/i,
+    path: '/spotify',
+    steps: [
+      'Buka postingan atau halamannya di Spotify, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'Ini hanya mengambil audio, bukan video.'
+  },
+  soundcloud: {
+    name: 'SoundCloud',
+    title: 'SoundCloud Downloader',
+    subtitle: 'Simpan lagu dari SoundCloud sebagai MP3.',
+    hint: 'Untuk lagu publik.',
+    placeholder: 'Tempel link SoundCloud',
+    pattern: /soundcloud\.com/i,
+    path: '/soundcloud',
+    steps: [
+      'Buka postingan atau halamannya di SoundCloud, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'Ini hanya mengambil audio, bukan video.'
+  },
+  applemusic: {
+    name: 'Apple Music',
+    title: 'Apple Music Downloader',
+    subtitle: 'Ambil audio dari lagu atau album Apple Music.',
+    hint: 'Hasilnya berupa MP3.',
+    placeholder: 'Tempel link Apple Music',
+    pattern: /music\.apple\.com/i,
+    path: '/applemusic',
+    steps: [
+      'Buka postingan atau halamannya di Apple Music, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'Ini hanya mengambil audio, bukan video.'
+  },
+  bilibili: {
+    name: 'Bilibili',
+    title: 'Bilibili Downloader',
+    subtitle: 'Simpan video dari Bilibili.',
+    hint: 'Untuk video publik. Link b23.tv juga bisa.',
+    placeholder: 'Tempel link Bilibili',
+    pattern: /bilibili\.com|b23\.tv/i,
+    path: '/bilibili',
+    steps: [
+      'Buka postingan atau halamannya di Bilibili, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'Video yang butuh login tidak bisa diunduh.'
+  },
+  douyin: {
+    name: 'Douyin',
+    title: 'Douyin Downloader',
+    subtitle: 'Simpan video dari Douyin tanpa watermark.',
+    hint: 'Untuk video publik.',
+    placeholder: 'Tempel link Douyin',
+    pattern: /douyin\.com|iesdouyin\.com/i,
+    path: '/douyin',
+    steps: [
+      'Buka postingan atau halamannya di Douyin, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'Video yang butuh login tidak bisa diunduh.'
+  },
+  bandcamp: {
+    name: 'Bandcamp',
+    title: 'Bandcamp Downloader',
+    subtitle: 'Ambil audio dari lagu atau album Bandcamp.',
+    hint: 'Hasilnya berupa MP3.',
+    placeholder: 'Tempel link Bandcamp',
+    pattern: /bandcamp\.com/i,
+    path: '/bandcamp',
+    steps: [
+      'Buka postingan atau halamannya di Bandcamp, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'Ini hanya mengambil audio, bukan video.'
+  },
+  pixiv: {
+    name: 'Pixiv',
+    title: 'Pixiv Downloader',
+    subtitle: 'Simpan gambar kualitas asli dari Pixiv.',
+    hint: 'Untuk karya publik.',
+    placeholder: 'Tempel link Pixiv',
+    pattern: /pixiv\.net/i,
+    path: '/pixiv',
+    steps: [
+      'Buka postingan atau halamannya di Pixiv, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'Karya yang dikunci atau khusus dewasa tidak bisa diunduh.'
+  },
+  reddit: {
+    name: 'Reddit',
+    title: 'Reddit Downloader',
+    subtitle: 'Simpan video dari postingan Reddit.',
+    hint: 'Untuk postingan publik. Link redd.it juga bisa.',
+    placeholder: 'Tempel link Reddit',
+    pattern: /reddit\.com|redd\.it/i,
+    path: '/reddit',
+    steps: [
+      'Buka postingan atau halamannya di Reddit, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'Video Reddit biasanya tanpa suara, kecuali tercantum di hasil.'
+  },
+  rednote: {
+    name: 'RedNote',
+    title: 'RedNote Downloader',
+    subtitle: 'Simpan video dan gambar dari RedNote (Xiaohongshu).',
+    hint: 'Untuk postingan publik. Link xhslink.com juga bisa.',
+    placeholder: 'Tempel link RedNote',
+    pattern: /xiaohongshu\.com|xhslink\.com/i,
+    path: '/rednote',
+    steps: [
+      'Buka postingan atau halamannya di RedNote, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'Postingan yang butuh login tidak bisa diunduh.'
+  },
+  terabox: {
+    name: 'TeraBox',
+    title: 'TeraBox Downloader',
+    subtitle: 'Ambil file dari link TeraBox yang dibagikan publik.',
+    hint: 'Hanya untuk link berbagi yang publik.',
+    placeholder: 'Tempel link TeraBox',
+    pattern: /terabox|teraboxapp/i,
+    path: '/terabox',
+    steps: [
+      'Buka postingan atau halamannya di TeraBox, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'File yang butuh kata sandi tidak bisa diunduh.'
+  },
+  threads: {
+    name: 'Threads',
+    title: 'Threads Downloader',
+    subtitle: 'Simpan video dan gambar dari postingan Threads.',
+    hint: 'Untuk postingan publik.',
+    placeholder: 'Tempel link Threads',
+    pattern: /threads\.(net|com)/i,
+    path: '/threads',
+    steps: [
+      'Buka postingan atau halamannya di Threads, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
+    ],
+    note: 'Postingan yang hanya berisi teks tidak punya media untuk diunduh.'
+  }
+}
+
+// Cari platform dari sebuah link. Hasilnya id platform, atau null.
+LX.detectPlatform = (link) =>
+  Object.keys(LX.platforms).find((id) => LX.platforms[id].pattern.test(link)) || null
