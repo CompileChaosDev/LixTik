@@ -347,12 +347,12 @@ LX.pages.downloader = function () {
         ${data.author ? `<p class="owner">${escapeHTML(data.author)}</p>` : ''}
         <p class="caption">${escapeHTML(data.title)}</p>
         ${renderStats(data.stats)}
-        <div class="downloads">${media.map((item, index) => fileButton(item, index === 0)).join('')}</div>
+        <div class="downloads">${media.map((item, index) => fileButton(item.kind === 'audio' ? { ...item, label: 'Download MP3' } : item, index === 0)).join('')}</div>
       </div>`
   }
 
   // ----- Playlist Spotify: daftar lagu, pilih, lalu unduh -----
-  const TRACK_PAGE = 10
+  const TRACK_PAGE = 7
   let trackPage = 0
   let picked = new Set()
 
@@ -360,6 +360,7 @@ LX.pages.downloader = function () {
     return String(text).replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80) || 'Lagu'
   }
 
+  // ----- Daftar playlist -----
   function renderPlaylist() {
     const tracks = currentData.tracks
     const pages = Math.max(1, Math.ceil(tracks.length / TRACK_PAGE))
@@ -376,12 +377,14 @@ LX.pages.downloader = function () {
         </div>
         <ul class="track-list">
           ${items.map((t) => `
-            <li class="track">
-              <label>
-                <input type="checkbox" data-track="${t.index}" ${picked.has(t.index) ? 'checked' : ''}>
-                <span class="track-name">${escapeHTML(t.title)}</span>
-                ${t.artist ? `<small>${escapeHTML(t.artist)}</small>` : ''}
-              </label>
+            <li class="track${picked.has(t.index) ? ' is-picked' : ''}">
+              <button class="track-main" type="button" data-action="tpick" data-track-index="${t.index}" aria-pressed="${picked.has(t.index) ? 'true' : 'false'}">
+                ${isUrl(t.thumbnail) ? `<img class="track-cover" src="${escapeHTML(t.thumbnail)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : '<span class="track-cover track-cover-empty" aria-hidden="true"></span>'}
+                <span class="track-text">
+                  <span class="track-name">${escapeHTML(t.title)}</span>
+                  ${t.artist ? `<small>${escapeHTML(t.artist)}</small>` : ''}
+                </span>
+              </button>
             </li>`).join('')}
         </ul>
         <div class="pager">
@@ -389,7 +392,7 @@ LX.pages.downloader = function () {
           <span>Halaman ${trackPage + 1} / ${pages}</span>
           <button class="btn btn-small" type="button" data-action="tnext" aria-label="Halaman berikutnya" ${trackPage >= pages - 1 ? 'disabled' : ''}>&#8250;</button>
         </div>
-        <button class="btn btn-primary" type="button" data-action="tbatch" ${picked.size ? '' : 'disabled'}>Download yang dipilih (${picked.size})</button>
+        <div class="downloads"><button class="btn" type="button" data-action="tbatch">Download MP3</button></div>
       </div>`
   }
 
@@ -404,7 +407,10 @@ LX.pages.downloader = function () {
 
   async function downloadPicked(button) {
     const list = currentData.tracks.filter((t) => picked.has(t.index))
-    if (list.length === 0) return
+    if (list.length === 0) {
+      showToast('Pilih lagu yang ingin diunduh terlebih dahulu.')
+      return
+    }
 
     button.disabled = true
     let ok = 0
@@ -538,15 +544,12 @@ LX.pages.downloader = function () {
       renderPlaylist()
     }
     if (action === 'tbatch') downloadPicked(target)
-  })
-
-  result.addEventListener('change', (event) => {
-    const box = event.target
-    if (!box.matches || !box.matches('input[data-track]') || !currentData || !currentData.tracks) return
-    const index = Number(box.dataset.track)
-    if (box.checked) picked.add(index)
-    else picked.delete(index)
-    renderPlaylist()
+    if (action === 'tpick') {
+      const index = Number(target.dataset.trackIndex)
+      if (picked.has(index)) picked.delete(index)
+      else picked.add(index)
+      renderPlaylist()
+    }
   })
 
   // Media gagal dimuat: coba lewat proxy, lalu embed, lalu thumbnail.
