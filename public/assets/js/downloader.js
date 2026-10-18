@@ -361,6 +361,10 @@ LX.pages.downloader = function () {
   }
 
   // ----- Daftar playlist -----
+  function coverSrcFor(track) {
+    return `/api/spotify-cover?type=track&id=${encodeURIComponent(track.id)}`
+  }
+
   function renderPlaylist() {
     const tracks = currentData.tracks
     const pages = Math.max(1, Math.ceil(tracks.length / TRACK_PAGE))
@@ -370,6 +374,7 @@ LX.pages.downloader = function () {
 
     result.innerHTML = `
       <div class="box">
+        ${currentData.coverSrc ? `<img class="playlist-cover" src="${escapeHTML(currentData.coverSrc)}" alt="Cover ${escapeHTML(currentData.title)}" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
         <h2>${escapeHTML(currentData.title)}</h2>
         <p>${tracks.length} lagu${currentData.author ? ' · ' + escapeHTML(currentData.author) : ''}</p>
         <div class="stack">
@@ -379,7 +384,10 @@ LX.pages.downloader = function () {
           ${items.map((t) => `
             <li class="track${picked.has(t.index) ? ' is-picked' : ''}">
               <button class="track-main" type="button" data-action="tpick" data-track-index="${t.index}" aria-pressed="${picked.has(t.index) ? 'true' : 'false'}">
-                ${isUrl(t.thumbnail) ? `<img class="track-cover" src="${escapeHTML(t.thumbnail)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : '<span class="track-cover track-cover-empty" aria-hidden="true"></span>'}
+                <span class="track-cover-wrap" aria-hidden="true">
+                  <svg class="track-cover-fallback" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>
+                  <img class="track-cover" src="${escapeHTML(isUrl(t.thumbnail) ? t.thumbnail : coverSrcFor(t))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
+                </span>
                 <span class="track-text">
                   <span class="track-name">${escapeHTML(t.title)}</span>
                   ${t.artist ? `<small>${escapeHTML(t.artist)}</small>` : ''}
