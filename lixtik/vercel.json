@@ -1,0 +1,28 @@
+{
+  "cleanUrls": true,
+  "functions": {
+    "api/download.js": {
+      "maxDuration": 30
+    },
+    "api/file.js": {
+      "maxDuration": 60
+    },
+    "api/spotify-track.js": {
+      "maxDuration": 30
+    },
+    "api/spotify-cover.js": {
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, must-revalidate"
+        }
+      ]
+    }
+  ]
+}

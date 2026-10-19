@@ -1,0 +1,203 @@
+/* layout.css: bar atas, menu samping, kerangka halaman. */
+/* ---------- Bar atas + menu samping ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(14px + env(safe-area-inset-top, 0px)) 18px 14px;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logo-mark { width: 34px; height: 34px; flex-shrink: 0; stroke: none; }
+
+.wordmark {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.icon-btn svg { width: 26px; height: 26px; stroke-width: 2; }
+
+.close-btn {
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+
+.close-btn svg { width: 20px; height: 20px; }
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgba(17, 24, 39, .45);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  width: min(82vw, 300px);
+  background: var(--card);
+  border-right: 1px solid var(--line);
+  transform: translateX(-100%);
+  visibility: hidden;
+  transition: transform .25s ease, visibility 0s .25s;
+}
+
+body.menu-open .overlay { opacity: 1; pointer-events: auto; }
+body.menu-open .sidebar { transform: none; visibility: visible; transition: transform .25s ease; }
+
+.sidebar-head {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(16px + env(safe-area-inset-top, 0px)) 18px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 14px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 13px 16px;
+  color: var(--text);
+  border-radius: 14px;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.menu-link svg { width: 22px; height: 22px; flex-shrink: 0; }
+.menu-link:hover { background: var(--soft); }
+.menu-link.active { background: var(--soft); font-weight: 500; }
+.menu-link.active svg { color: var(--accent); }
+.menu-wa { color: var(--wa); }
+.menu-tg { color: var(--tg); }
+
+.menu-line {
+  width: calc(100% - 24px);
+  margin: 10px 12px;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.sidebar-foot {
+  flex-shrink: 0;
+  margin-top: auto;
+  padding: 18px 24px calc(18px + env(safe-area-inset-bottom, 0px));
+  background: var(--soft);
+  font-size: 13px;
+}
+
+
+/* ---------- Konten ---------- */
+.main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 18px 48px;
+}
+
+.page-head { margin-bottom: 20px; }
+.page-head h1 { font-size: 1.5rem; font-weight: 600; line-height: 1.3; letter-spacing: -.01em; }
+.page-head p { margin-top: 2px; font-size: 14px; }
+
+.page-head-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+
+.footer { margin-top: 40px; font-size: 13px; text-align: center; }
+
+.toast {
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  left: 16px;
+  z-index: 60;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 13px 18px;
+  color: #fff;
+  background: #0b1a33;
+  border-radius: 14px;
+  font-size: 14px;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity .2s, transform .2s;
+}
+
+.toast.show { opacity: 1; transform: none; }
+
+
+/* Desktop: menu samping tetap terlihat */
+@media (min-width: 1024px) {
+  .topbar, .overlay, .close-btn { display: none; }
+
+  .sidebar {
+    width: var(--side);
+    transform: none;
+    visibility: visible;
+    transition: none;
+  }
+
+  .main {
+    max-width: 760px;
+    margin-left: calc(var(--side) + (100vw - var(--side) - 760px) / 2);
+    margin-right: 0;
+    padding-top: 40px;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1100px) {
+  .main { margin-left: calc(var(--side) + 16px); }
+}
+
+
+.menu-label { margin: 14px 16px 4px; font-size: 12px; font-weight: 500; color: var(--muted); }
