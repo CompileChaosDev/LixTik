@@ -24,10 +24,6 @@
 | Twitter / X Downloader | `/twitter` | Video dan gambar dari postingan |
 | Facebook Downloader | `/facebook` | Video dari postingan publik |
 | Spotify Downloader | `/spotify` | Audio lagu, album, dan playlist (MP3) |
-| SoundCloud Downloader | `/soundcloud` | Audio lagu (MP3) |
-| Apple Music Downloader | `/applemusic` | Audio lagu dan album (MP3) |
-| Bilibili Downloader | `/bilibili` | Video publik |
-| Douyin Downloader | `/douyin` | Video tanpa watermark |
 | Bandcamp Downloader | `/bandcamp` | Audio lagu dan album (MP3) |
 | Pixiv Downloader | `/pixiv` | Gambar kualitas asli |
 | Reddit Downloader | `/reddit` | Video dari postingan |
@@ -159,4 +155,4 @@ Link channel WhatsApp (menu samping) diisi di `assets/js/config.js` (`whatsappUr
 
 ## Kredit
 
-Scraper TikTok diambil dari [coflyn/scrapr](https://github.com/coflyn/scrapr) (lisensi MIT, salinannya ada di `lib/tiktok/LICENSE`). Platform YouTube, Twitter/X, Facebook, Spotify, SoundCloud, Apple Music, Bilibili, Douyin, Bandcamp, Pixiv, Reddit, RedNote, TeraBox, dan Threads juga memakai modul dari scrapr (lisensi MIT, lihat `lib/scrapr/LICENSE`). Modul yang butuh browser sengaja tidak dipakai karena tidak bisa jalan di Vercel. Sumber `savetik` sengaja dilewati karena butuh browser Chrome yang nggak bisa jalan di Vercel.
+Scraper TikTok diambil dari [coflyn/scrapr](https://github.com/coflyn/scrapr) (lisensi MIT, salinannya ada di `lib/tiktok/LICENSE`). Platform YouTube, Twitter/X, Facebook, Spotify, Bandcamp, Pixiv, Reddit, RedNote, TeraBox, dan Threads juga memakai modul dari scrapr (lisensi MIT, lihat `lib/scrapr/LICENSE`). Modul yang butuh browser sengaja tidak dipakai karena tidak bisa jalan di Vercel. Sumber `savetik` sengaja dilewati karena butuh browser Chrome yang nggak bisa jalan di Vercel.

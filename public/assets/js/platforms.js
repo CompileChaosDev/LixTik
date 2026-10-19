@@ -109,66 +109,6 @@ LX.platforms = {
     ],
     note: 'Ini hanya mengambil audio, bukan video.'
   },
-  soundcloud: {
-    name: 'SoundCloud',
-    title: 'SoundCloud Downloader',
-    subtitle: 'Simpan lagu dari SoundCloud sebagai MP3.',
-    hint: 'Untuk lagu publik.',
-    placeholder: 'Tempel link SoundCloud',
-    pattern: /soundcloud\.com/i,
-    path: '/soundcloud',
-    steps: [
-      'Buka postingan atau halamannya di SoundCloud, lalu salin link-nya.',
-      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
-    ],
-    note: 'Ini hanya mengambil audio, bukan video.'
-  },
-  applemusic: {
-    name: 'Apple Music',
-    title: 'Apple Music Downloader',
-    subtitle: 'Ambil audio dari lagu atau album Apple Music.',
-    hint: 'Hasilnya berupa MP3.',
-    placeholder: 'Tempel link Apple Music',
-    pattern: /music\.apple\.com/i,
-    path: '/applemusic',
-    steps: [
-      'Buka postingan atau halamannya di Apple Music, lalu salin link-nya.',
-      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
-    ],
-    note: 'Ini hanya mengambil audio, bukan video.'
-  },
-  bilibili: {
-    name: 'Bilibili',
-    title: 'Bilibili Downloader',
-    subtitle: 'Simpan video dari Bilibili.',
-    hint: 'Untuk video publik. Link b23.tv juga bisa.',
-    placeholder: 'Tempel link Bilibili',
-    pattern: /bilibili\.com|b23\.tv/i,
-    path: '/bilibili',
-    steps: [
-      'Buka postingan atau halamannya di Bilibili, lalu salin link-nya.',
-      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
-    ],
-    note: 'Video yang butuh login tidak bisa diunduh.'
-  },
-  douyin: {
-    name: 'Douyin',
-    title: 'Douyin Downloader',
-    subtitle: 'Simpan video dari Douyin tanpa watermark.',
-    hint: 'Untuk video publik.',
-    placeholder: 'Tempel link Douyin',
-    pattern: /douyin\.com|iesdouyin\.com/i,
-    path: '/douyin',
-    steps: [
-      'Buka postingan atau halamannya di Douyin, lalu salin link-nya.',
-      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
-    ],
-    note: 'Video yang butuh login tidak bisa diunduh.'
-  },
   bandcamp: {
     name: 'Bandcamp',
     title: 'Bandcamp Downloader',
