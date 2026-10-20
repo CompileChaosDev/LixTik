@@ -1,2 +1,0 @@
-Modul di folder ini berasal dari https://github.com/coflyn/scrapr (MIT).
-Lisensi lengkap ada di file LICENSE pada folder ini.
