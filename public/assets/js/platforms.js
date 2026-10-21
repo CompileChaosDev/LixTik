@@ -139,51 +139,6 @@ LX.platforms = {
     ],
     note: 'Karya yang dikunci atau khusus dewasa tidak bisa diunduh.'
   },
-  reddit: {
-    name: 'Reddit',
-    title: 'Reddit Downloader',
-    subtitle: 'Simpan video dari postingan Reddit.',
-    hint: 'Untuk postingan publik. Link redd.it juga bisa.',
-    placeholder: 'Tempel link Reddit',
-    pattern: /reddit\.com|redd\.it/i,
-    path: '/reddit',
-    steps: [
-      'Buka postingan atau halamannya di Reddit, lalu salin link-nya.',
-      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
-    ],
-    note: 'Video Reddit biasanya tanpa suara, kecuali tercantum di hasil.'
-  },
-  rednote: {
-    name: 'RedNote',
-    title: 'RedNote Downloader',
-    subtitle: 'Simpan video dan gambar dari RedNote (Xiaohongshu).',
-    hint: 'Untuk postingan publik. Link xhslink.com juga bisa.',
-    placeholder: 'Tempel link RedNote',
-    pattern: /xiaohongshu\.com|xhslink\.com/i,
-    path: '/rednote',
-    steps: [
-      'Buka postingan atau halamannya di RedNote, lalu salin link-nya.',
-      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
-    ],
-    note: 'Postingan yang butuh login tidak bisa diunduh.'
-  },
-  terabox: {
-    name: 'TeraBox',
-    title: 'TeraBox Downloader',
-    subtitle: 'Ambil file dari link TeraBox yang dibagikan publik.',
-    hint: 'Hanya untuk link berbagi yang publik.',
-    placeholder: 'Tempel link TeraBox',
-    pattern: /terabox|teraboxapp/i,
-    path: '/terabox',
-    steps: [
-      'Buka postingan atau halamannya di TeraBox, lalu salin link-nya.',
-      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
-    ],
-    note: 'File yang butuh kata sandi tidak bisa diunduh.'
-  },
   threads: {
     name: 'Threads',
     title: 'Threads Downloader',

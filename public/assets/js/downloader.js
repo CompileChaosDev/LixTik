@@ -172,9 +172,31 @@ LX.pages.downloader = function () {
     link.remove()
   }
 
+  // Muat skrip eksternal sekali, saat benar-benar dibutuhkan.
+  const scriptCache = {}
+  function loadScript(src) {
+    if (!scriptCache[src]) {
+      scriptCache[src] = new Promise((resolve, reject) => {
+        const el = document.createElement('script')
+        el.src = src
+        el.onload = () => resolve()
+        el.onerror = () => { delete scriptCache[src]; reject(new Error('Gagal memuat skrip')) }
+        document.head.appendChild(el)
+      })
+    }
+    return scriptCache[src]
+  }
+
+  // Fetch dengan batas waktu supaya halaman tidak menunggu tanpa akhir.
+  function fetchWithTimeout(url, options = {}, ms = 25000) {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), ms)
+    return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer))
+  }
+
   async function proxyWorks(href) {
     try {
-      const check = await fetch(href + '&probe=1')
+      const check = await fetchWithTimeout(href + '&probe=1', {}, 15000)
       return check.ok
     } catch {
       return false
@@ -183,7 +205,7 @@ LX.pages.downloader = function () {
 
   async function saveDirect(url, name) {
     try {
-      const response = await fetch(url, { referrerPolicy: 'no-referrer' })
+      const response = await fetchWithTimeout(url, { referrerPolicy: 'no-referrer' }, 60000)
       if (!response.ok) throw new Error('Ditolak')
 
       const blob = await response.blob()
@@ -225,6 +247,7 @@ LX.pages.downloader = function () {
     button.textContent = 'Menyiapkan ZIP...'
 
     try {
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js')
       const zip = new JSZip()
       const stamp = Date.now()
 
@@ -464,7 +487,7 @@ LX.pages.downloader = function () {
       try {
         let audioUrl = track.audio || ''
         if (!audioUrl) {
-          const response = await fetch(`/api/spotify-track?id=${encodeURIComponent(track.id)}`)
+          const response = await fetchWithTimeout(`/api/spotify-track?id=${encodeURIComponent(track.id)}`, {}, 30000)
           const data = await response.json().catch(() => ({}))
           if (!response.ok || !data.url) throw new Error('gagal')
           audioUrl = data.url
@@ -504,7 +527,7 @@ LX.pages.downloader = function () {
 
   async function fetchData(url) {
     if (LX.demo) return LX.demo.fetchData()
-    const response = await fetch('/api/download?url=' + encodeURIComponent(url))
+    const response = await fetchWithTimeout('/api/download?url=' + encodeURIComponent(url), {}, 35000)
     const text = await response.text()
 
     let data

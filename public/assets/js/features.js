@@ -33,12 +33,6 @@ LX.features = [
     desc: 'Ambil audio dari lagu atau album Bandcamp.', path: '/bandcamp', icon: 'bandcamp', color: '#1d4ed8' },
   { id: 'pixiv', group: 'downloader', title: 'Pixiv', pageTitle: 'Pixiv Downloader',
     desc: 'Simpan gambar kualitas asli dari Pixiv.', path: '/pixiv', icon: 'pixiv', color: '#0284c7' },
-  { id: 'reddit', group: 'downloader', title: 'Reddit', pageTitle: 'Reddit Downloader',
-    desc: 'Simpan video dari postingan Reddit.', path: '/reddit', icon: 'reddit', color: '#f43f5e' },
-  { id: 'rednote', group: 'downloader', title: 'RedNote', pageTitle: 'RedNote Downloader',
-    desc: 'Simpan video dan gambar dari RedNote (Xiaohongshu).', path: '/rednote', icon: 'rednote', color: '#ef4444' },
-  { id: 'terabox', group: 'downloader', title: 'TeraBox', pageTitle: 'TeraBox Downloader',
-    desc: 'Ambil file dari link TeraBox yang dibagikan publik.', path: '/terabox', icon: 'terabox', color: '#2563eb' },
   { id: 'threads', group: 'downloader', title: 'Threads', pageTitle: 'Threads Downloader',
     desc: 'Simpan video dan gambar dari postingan Threads.', path: '/threads', icon: 'threads', color: '#1f2937' },
 
