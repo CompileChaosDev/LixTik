@@ -330,7 +330,9 @@ LX.pages.downloader = function () {
   function renderVideoPost(data) {
     const media = data.downloads.filter((item) => item.kind === 'video' || item.kind === 'audio')
     const video = data.downloads.find((item) => item.kind === 'video')
-    const poster = isUrl(data.thumbnail) ? escapeHTML(data.thumbnail) : ''
+    const photo = data.downloads.find((item) => item.kind === 'photo')
+    const imageSrc = isUrl(data.thumbnail) ? data.thumbnail : (photo && isUrl(photo.url) ? photo.url : '')
+    const poster = imageSrc ? escapeHTML(imageSrc) : ''
 
     let player = ''
     if (video) {
@@ -338,6 +340,8 @@ LX.pages.downloader = function () {
       player = `<video controls playsinline preload="metadata" referrerpolicy="no-referrer" ${poster ? `poster="${poster}"` : ''} data-proxy="${proxy}" src="${escapeHTML(video.url)}"></video>`
     } else if (poster) {
       player = `<img src="${poster}" referrerpolicy="no-referrer" alt="Thumbnail video">`
+    } else {
+      player = `<div class="cover-placeholder" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></div>`
     }
 
     result.innerHTML = `
@@ -360,6 +364,33 @@ LX.pages.downloader = function () {
     return String(text).replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80) || 'Lagu'
   }
 
+  // ----- Pratinjau lagu (Bandcamp dan sumber yang punya link audio) -----
+  let previewAudio = null
+  let previewIndex = null
+
+  function togglePreview(index) {
+    const track = currentData.tracks.find((t) => t.index === index)
+    if (!track || !track.audio) return
+    if (!previewAudio) {
+      previewAudio = new Audio()
+      previewAudio.addEventListener('ended', () => renderPlaylist())
+    }
+    if (previewIndex === index && !previewAudio.paused) {
+      previewAudio.pause()
+    } else {
+      if (previewIndex !== index) {
+        previewAudio.src = track.audio
+        previewIndex = index
+      }
+      previewAudio.play().catch(() => {
+        previewAudio.pause()
+        showToast('Lagu ini belum bisa diputar. Kamu tetap bisa download.')
+        renderPlaylist()
+      })
+    }
+    renderPlaylist()
+  }
+
   // ----- Daftar playlist -----
   function coverSrcFor(track) {
     return `/api/spotify-cover?type=track&id=${encodeURIComponent(track.id)}`
@@ -375,7 +406,7 @@ LX.pages.downloader = function () {
     result.innerHTML = `
       <div class="box">
         <div class="playlist-head">
-        ${currentData.coverSrc ? `<img class="playlist-cover" src="${escapeHTML(currentData.coverSrc)}" alt="Cover ${escapeHTML(currentData.title)}" referrerpolicy="no-referrer" data-fallback="${escapeHTML(coverSrcFor(currentData.tracks[0]))}" onerror="if(!this.dataset.tried){this.dataset.tried=1;this.src=this.dataset.fallback}else{this.remove()}">` : ''}
+        ${currentData.coverSrc ? `<img class="playlist-cover" src="${escapeHTML(currentData.coverSrc)}" alt="Cover ${escapeHTML(currentData.title)}" referrerpolicy="no-referrer" data-fallback="${escapeHTML(coverSrcFor(currentData.tracks[0]))}" onerror="if(!this.dataset.tried){this.dataset.tried=1;this.src=this.dataset.fallback}else{this.outerHTML='<div class=&quot;playlist-cover cover-placeholder&quot;><svg viewBox=&quot;0 0 24 24&quot;><path d=&quot;M9 18V6l10-2v12&quot;/><circle cx=&quot;6.5&quot; cy=&quot;18&quot; r=&quot;2.5&quot;/><circle cx=&quot;16.5&quot; cy=&quot;16&quot; r=&quot;2.5&quot;/></svg></div>'}">` : `<div class="playlist-cover cover-placeholder" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></div>`}
         <h2>${escapeHTML(currentData.title)}</h2>
         <p>${tracks.length} lagu${currentData.author ? ' · ' + escapeHTML(currentData.author) : ''}</p>
         </div>
@@ -388,13 +419,14 @@ LX.pages.downloader = function () {
               <button class="track-main" type="button" data-action="tpick" data-track-index="${t.index}" aria-pressed="${picked.has(t.index) ? 'true' : 'false'}">
                 <span class="track-cover-wrap" aria-hidden="true">
                   <svg class="track-cover-fallback" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>
-                  <img class="track-cover" src="${escapeHTML(coverSrcFor(t))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
+                  <img class="track-cover" src="${escapeHTML(t.audio && isUrl(t.thumbnail) ? t.thumbnail : coverSrcFor(t))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
                 </span>
                 <span class="track-text">
                   <span class="track-name">${escapeHTML(t.title)}</span>
                   ${t.artist ? `<small>${escapeHTML(t.artist)}</small>` : ''}
                 </span>
               </button>
+              ${t.audio ? `<button class="track-play" type="button" data-action="tplay" data-track-index="${t.index}" aria-label="Putar ${escapeHTML(t.title)}">${previewIndex === t.index && previewAudio && !previewAudio.paused ? '&#10074;&#10074;' : '&#9654;'}</button>` : ''}
             </li>`).join('')}
         </ul>
         <div class="pager">
@@ -430,10 +462,14 @@ LX.pages.downloader = function () {
       const track = list[i]
       showToast(`Mengunduh ${i + 1} dari ${list.length}...`)
       try {
-        const response = await fetch(`/api/spotify-track?id=${encodeURIComponent(track.id)}`)
-        const data = await response.json().catch(() => ({}))
-        if (!response.ok || !data.url) throw new Error('gagal')
-        await saveTrack(data.url, safeTitle(track.artist ? `${track.artist} - ${track.title}` : track.title))
+        let audioUrl = track.audio || ''
+        if (!audioUrl) {
+          const response = await fetch(`/api/spotify-track?id=${encodeURIComponent(track.id)}`)
+          const data = await response.json().catch(() => ({}))
+          if (!response.ok || !data.url) throw new Error('gagal')
+          audioUrl = data.url
+        }
+        await saveTrack(audioUrl, safeTitle(track.artist ? `${track.artist} - ${track.title}` : track.title))
         recordHistory('MP3')
         ok += 1
       } catch (err) {
@@ -449,6 +485,8 @@ LX.pages.downloader = function () {
   function renderResult(data) {
     currentData = data
     slideIndex = 0
+    if (previewAudio) previewAudio.pause()
+    previewIndex = null
 
     if (Array.isArray(data.tracks) && data.tracks.length > 0) {
       trackPage = 0
@@ -554,6 +592,7 @@ LX.pages.downloader = function () {
       renderPlaylist()
     }
     if (action === 'tbatch') downloadPicked(target)
+    if (action === 'tplay') togglePreview(Number(target.dataset.trackIndex))
     if (action === 'tpick') {
       const index = Number(target.dataset.trackIndex)
       if (picked.has(index)) picked.delete(index)

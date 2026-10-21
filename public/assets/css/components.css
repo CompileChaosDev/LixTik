@@ -191,3 +191,8 @@
 .playlist-head .playlist-cover { width: min(64vw, 200px); height: min(64vw, 200px); margin: 0 auto 14px; }
 .playlist-head h2 { margin: 0; }
 .playlist-head p { margin: 4px 0 0; }
+.track-play { width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--accent); color: #fff; flex-shrink: 0; margin: 0 10px 0 0; cursor: pointer; font-size: 14px; display: grid; place-items: center; }
+.track-play:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.cover-placeholder { display: grid; place-items: center; background: var(--line, #e2e8f0); border-radius: 16px; min-height: 160px; width: 100%; margin: 0 0 12px; }
+.cover-placeholder svg { width: 40px; height: 40px; fill: none; stroke: var(--muted); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.playlist-head .cover-placeholder { width: min(64vw, 200px); height: min(64vw, 200px); min-height: 0; margin: 0 auto 14px; }
