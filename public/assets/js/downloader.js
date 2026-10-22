@@ -157,8 +157,8 @@ LX.pages.downloader = function () {
 
   function fileBase(kind) {
     const stamp = Date.now()
-    if (kind === 'video' && currentData.username) return `LixTik_@${currentData.username}_${stamp}`
-    return `LixTik_${stamp}`
+    if (kind === 'video' && currentData.username) return `${LX.config.name}_@${currentData.username}_${stamp}`
+    return `${LX.config.name}_${stamp}`
   }
 
   const showToast = LX.toast
@@ -252,7 +252,7 @@ LX.pages.downloader = function () {
       const stamp = Date.now()
 
       await Promise.all(photos.map(async (item, index) => {
-        const name = `LixTik_${stamp}_${index + 1}`
+        const name = `${LX.config.name}_${stamp}_${index + 1}`
         let response = await fetch(proxyUrl(item.url, name, 'photo')).catch(() => null)
         if (!response || !response.ok) response = await fetch(item.url, { referrerPolicy: 'no-referrer' })
         if (!response.ok) throw new Error('Gagal mengambil foto')
@@ -265,7 +265,7 @@ LX.pages.downloader = function () {
       const href = URL.createObjectURL(content)
       const link = document.createElement('a')
       link.href = href
-      link.download = `LixTik_${stamp}.zip`
+      link.download = `${LX.config.name}_${stamp}.zip`
       document.body.appendChild(link)
       link.click()
       link.remove()

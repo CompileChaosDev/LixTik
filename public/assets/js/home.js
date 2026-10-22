@@ -1,23 +1,11 @@
-// Homepage: kartu fitur dibuat otomatis dari daftar di features.js.
 LX.pages.home = function () {
-  const card = (f) => {
-    const inner = `
-      <span class="s-icon">${LX.icons[f.icon] || LX.icons.grid}</span>
-      <h3>${f.title}</h3>
-      <p>${f.desc}</p>
-      ${f.soon ? '<span class="tag">Segera</span>' : ''}`
-    return f.soon
-      ? `<div class="hub-card soon" style="--cc:${f.color}">${inner}</div>`
-      : `<a class="hub-card" href="${f.path}" style="--cc:${f.color}">${inner}</a>`
-  }
-
-  LX.$('hub').innerHTML = LX.groups.map((g) => {
-    const items = LX.featuresIn(g.id)
-    if (!items.length) return ''
-    return `
-      <section class="hub-group">
-        <div class="hub-head"><h2>${g.title}</h2></div>
-        <div class="hub-grid">${items.map(card).join('')}</div>
-      </section>`
-  }).join('')
+  LX.$('hub').innerHTML = `
+    <section class="home-page home-shell">
+      <div class="welcome-wrap">
+        <img class="welcome-banner" src="/assets/img/welcome-banner.jpg" alt="Welcome" referrerpolicy="no-referrer">
+        <img class="welcome-profile" src="/assets/img/profile.jpg" alt="">
+      </div>
+      <p class="welcome-text">${LX.config.name} — alat pengunduh serbaguna untuk simpan video, audio, dan gambar dari berbagai platform media sosial dalam satu tempat. Praktis dan cepat!</p>
+      <footer class="footer"><p>&copy; 2026 ${LX.config.name}</p></footer>
+    </section>`
 }

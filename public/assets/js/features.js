@@ -16,30 +16,30 @@ LX.groups = [
 // soon: true menampilkan kartu "Segera" yang belum bisa dibuka.
 LX.features = [
   { id: 'tiktok', group: 'downloader', title: 'TikTok', pageTitle: 'TikTok Downloader',
-    desc: 'Video tanpa watermark, MP3, dan slideshow foto.', path: '/tiktok', icon: 'tiktok', color: '#38bdf8' },
+    desc: 'Video tanpa watermark, MP3, dan slideshow foto.', home: false, path: '/tiktok', icon: 'tiktok', color: '#38bdf8' },
   { id: 'instagram', group: 'downloader', title: 'Instagram', pageTitle: 'Instagram Downloader',
-    desc: 'Reel, video, dan foto dari postingan publik.', path: '/instagram', icon: 'instagram', color: '#60a5fa' },
+    desc: 'Reel, video, dan foto dari postingan publik.', home: false, path: '/instagram', icon: 'instagram', color: '#60a5fa' },
   { id: 'pinterest', group: 'downloader', title: 'Pinterest', pageTitle: 'Pinterest Downloader',
-    desc: 'Video dan gambar kualitas asli dari pin.', path: '/pinterest', icon: 'pinterest', color: '#3b82f6' },
+    desc: 'Video dan gambar kualitas asli dari pin.', home: false, path: '/pinterest', icon: 'pinterest', color: '#3b82f6' },
   { id: 'youtube', group: 'downloader', title: 'YouTube', pageTitle: 'YouTube Downloader',
-    desc: 'Simpan video atau audio dari YouTube.', path: '/youtube', icon: 'youtube', color: '#ef4444' },
+    desc: 'Simpan video atau audio dari YouTube.', home: false, path: '/youtube', icon: 'youtube', color: '#ef4444' },
   { id: 'twitter', group: 'downloader', title: 'Twitter / X', pageTitle: 'Twitter / X Downloader',
-    desc: 'Simpan video dan gambar dari postingan Twitter atau X.', path: '/twitter', icon: 'twitter', color: '#38bdf8' },
+    desc: 'Simpan video dan gambar dari postingan Twitter atau X.', home: false, path: '/twitter', icon: 'twitter', color: '#38bdf8' },
   { id: 'facebook', group: 'downloader', title: 'Facebook', pageTitle: 'Facebook Downloader',
-    desc: 'Simpan video dari postingan Facebook.', path: '/facebook', icon: 'facebook', color: '#3b82f6' },
+    desc: 'Simpan video dari postingan Facebook.', home: false, path: '/facebook', icon: 'facebook', color: '#3b82f6' },
   { id: 'spotify', group: 'downloader', title: 'Spotify', pageTitle: 'Spotify Downloader',
-    desc: 'Ambil audio lagu, album, atau playlist Spotify.', path: '/spotify', icon: 'spotify', color: '#22c55e' },
+    desc: 'Ambil audio lagu, album, atau playlist Spotify.', home: false, path: '/spotify', icon: 'spotify', color: '#22c55e' },
   { id: 'bandcamp', group: 'downloader', title: 'Bandcamp', pageTitle: 'Bandcamp Downloader',
-    desc: 'Ambil audio dari lagu atau album Bandcamp.', path: '/bandcamp', icon: 'bandcamp', color: '#1d4ed8' },
+    desc: 'Ambil audio dari lagu atau album Bandcamp.', home: false, path: '/bandcamp', icon: 'bandcamp', color: '#1d4ed8' },
   { id: 'pixiv', group: 'downloader', title: 'Pixiv', pageTitle: 'Pixiv Downloader',
-    desc: 'Simpan gambar kualitas asli dari Pixiv.', path: '/pixiv', icon: 'pixiv', color: '#0284c7' },
+    desc: 'Simpan gambar kualitas asli dari Pixiv.', home: false, path: '/pixiv', icon: 'pixiv', color: '#0284c7' },
   { id: 'threads', group: 'downloader', title: 'Threads', pageTitle: 'Threads Downloader',
-    desc: 'Simpan video dan gambar dari postingan Threads.', path: '/threads', icon: 'threads', color: '#1f2937' },
+    desc: 'Simpan video dan gambar dari postingan Threads.', home: false, path: '/threads', icon: 'threads', color: '#1f2937' },
 
   { id: 'history', group: 'lainnya', title: 'History', pageTitle: 'History',
-    desc: 'Daftar yang pernah kamu download.', path: '/history', icon: 'clock', color: '#93c5fd' },
+    desc: 'Daftar yang pernah kamu download.', home: false, path: '/history', icon: 'clock', color: '#93c5fd' },
   { id: 'panduan', group: 'lainnya', title: 'Panduan', pageTitle: 'Panduan',
-    desc: 'Cara pakai dan solusi kalau ada masalah.', path: '/panduan', icon: 'book', color: '#7dd3fc' }
+    desc: 'Cara pakai dan solusi kalau ada masalah.', home: false, path: '/panduan', icon: 'book', color: '#7dd3fc' }
 ]
 
 LX.featureById = (id) => LX.features.find((f) => f.id === id)

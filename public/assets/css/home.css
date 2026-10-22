@@ -1,5 +1,10 @@
 /* home.css: homepage (tema biru gelap, kaca) dan kartu fitur. */
 body.home-neon {
+  background-color: #020b1f;
+  background-image: url(/assets/img/grid-bg-dark.jpg);
+  background-size: cover;
+  background-position: center top;
+  background-blend-mode: screen;
   --bg: #020b1f;
   --card: rgba(8, 26, 70, .55);
   --soft: rgba(96, 165, 250, .12);
@@ -9,7 +14,7 @@ body.home-neon {
   --accent: #4f9dff;
   --accent-soft: rgba(79, 157, 255, .2);
   --shadow: none;
-  background: #020b1f;
+  /* background-color sudah diatur di atas */
 }
 
 /* cahaya biru di latar */
@@ -156,3 +161,19 @@ body.home-neon::after {
   .hero { margin: 0 0 20px; min-height: 340px; border-radius: 26px; background-position: 60% 20%; }
   .home-neon::before, .home-neon::after { left: var(--side); }
 }
+
+/* Homepage: banner, foto profil, tombol Channel WhatsApp, teks */
+.home-page { max-width: 480px; margin: 0 auto; padding: 16px 18px 8px; }
+.welcome-wrap { position: relative; margin-top: 8px; padding-bottom: 46px; }
+.welcome-banner { display: block; width: 100%; aspect-ratio: 631 / 348; object-fit: cover; border-radius: 22px; background: #1e1b4b; }
+.welcome-profile { position: absolute; right: 6px; bottom: 0; width: 112px; height: 112px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; background: #fff; box-shadow: 0 6px 18px rgba(0,0,0,.15); }
+.welcome-cta { display: block; margin: 40px auto 0; width: 100%; text-align: center; background: #000; color: #fff; padding: 18px 16px; border-radius: 999px; font-weight: 600; font-size: 20px; text-decoration: none; }
+.welcome-text { margin: 26px 0 0; font-size: 20px; line-height: 1.5; font-weight: 600; color: #374151; }
+.welcome-footer { text-align: center; letter-spacing: .12em; font-size: 12px; font-weight: 700; margin: 56px 0 24px; color: #374151; }
+
+/* Footer homepage selalu di bagian bawah layar */
+/* Homepage pas satu layar: tanpa bisa digeser */
+body[data-kind="home"] .main { padding-bottom: 0; }
+body[data-kind="home"] { overflow: hidden; }
+.home-shell { height: calc(100dvh - 117px); min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.home-shell .footer { margin-top: auto; padding-top: 40px; }

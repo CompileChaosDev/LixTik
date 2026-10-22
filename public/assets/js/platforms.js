@@ -17,7 +17,6 @@ LX.platforms = {
       'Ketuk <b>Download</b> dan tunggu beberapa detik sampai hasilnya muncul.',
       'Pilih <b>MP4</b> untuk video tanpa watermark (pilih HD kalau ada), atau <b>MP3</b> untuk suaranya saja.'
     ],
-    note: 'Postingan foto tampil sebagai slider. Geser, lalu simpan satu foto atau semuanya dalam ZIP.'
   },
   instagram: {
     name: 'Instagram',
@@ -32,7 +31,6 @@ LX.platforms = {
       'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
       'Pilih video atau foto yang mau disimpan.'
     ],
-    note: 'Postingan dengan banyak foto tampil sebagai slider, sama seperti TikTok.'
   },
   pinterest: {
     name: 'Pinterest',
@@ -47,7 +45,6 @@ LX.platforms = {
       'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
       'Simpan videonya atau gambar kualitas aslinya.'
     ],
-    note: ''
   },
   youtube: {
     name: 'YouTube',
@@ -62,7 +59,6 @@ LX.platforms = {
       'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
       'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
-    note: 'Video panjang butuh waktu lebih lama. Kalau gagal, coba lagi beberapa saat kemudian.'
   },
   twitter: {
     name: 'Twitter / X',
@@ -77,7 +73,6 @@ LX.platforms = {
       'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
       'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
-    note: 'Postingan yang hanya berisi teks tidak punya media untuk diunduh.'
   },
   facebook: {
     name: 'Facebook',
@@ -92,7 +87,6 @@ LX.platforms = {
       'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
       'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
-    note: 'Video dari grup atau akun yang dikunci tidak bisa diunduh.'
   },
   spotify: {
     name: 'Spotify',
@@ -107,7 +101,6 @@ LX.platforms = {
       'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
       'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
-    note: 'Ini hanya mengambil audio, bukan video.'
   },
   bandcamp: {
     name: 'Bandcamp',
@@ -122,7 +115,6 @@ LX.platforms = {
       'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
       'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
-    note: 'Ini hanya mengambil audio, bukan video.'
   },
   pixiv: {
     name: 'Pixiv',
@@ -137,7 +129,6 @@ LX.platforms = {
       'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
       'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
-    note: 'Karya yang dikunci atau khusus dewasa tidak bisa diunduh.'
   },
   threads: {
     name: 'Threads',
@@ -152,7 +143,6 @@ LX.platforms = {
       'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
       'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
-    note: 'Postingan yang hanya berisi teks tidak punya media untuk diunduh.'
   }
 }
 
