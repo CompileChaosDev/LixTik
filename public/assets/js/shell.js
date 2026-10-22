@@ -11,7 +11,7 @@ LX.escape = (text) => {
 }
 
 LX.params = () => new URLSearchParams(location.search)
-// LX.go (pindah halaman + transisi) didefinisikan di transition.js
+LX.go = (href) => { location.href = href }
 
 let toastTimer = null
 LX.toast = (message) => {
@@ -116,6 +116,7 @@ LX.boot = () => {
   body.classList.remove('home-neon')
   document.title = feature ? `${feature.pageTitle || feature.title} - ${LX.config.name}` : `${LX.config.name} - Semua fitur dalam satu tempat`
   document.querySelectorAll('.footer p').forEach((p) => { p.innerHTML = `&copy; 2026 ${LX.config.name}` })
+
   LX.renderShell(page)
   if (LX.pages[kind]) LX.pages[kind]()
   window.scrollTo(0, 0)
@@ -130,3 +131,4 @@ if (!LX._bound) {
 
 // Halaman biasa: jalan otomatis. (Pratinjau memanggil LX.boot() sendiri.)
 if (!LX.manualBoot) document.addEventListener('DOMContentLoaded', LX.boot)
+
