@@ -9,7 +9,7 @@ window.LX = window.LX || {}
 
 ;(function () {
   const KEY = 'lx_tr'
-  const INTRO_MS = 800       // total animasi intro (dihitung sejak klik, lintas halaman)
+  const INTRO_MS = 650       // total animasi intro (dihitung sejak klik, lintas halaman)
   const EXIT_MS = 260        // lama memudar
   const MAX_ON_NEW_MS = 2200 // batas keras overlay di halaman baru
   const LEAVE_GUARD_MS = 7000 // jika navigasi batal/gagal, overlay dilepas
@@ -145,7 +145,15 @@ window.LX = window.LX || {}
       setTimeout(() => exit(g), wait)
     }
     // Siap = DOM selesai dibaca + dua frame berjalan (shell sudah dirender). Tidak menunggu gambar.
-    const ready = () => requestAnimationFrame(() => requestAnimationFrame(close))
+    // Tunggu juga gambar dan font awal supaya isi halaman tidak 'pop-in' setelah overlay hilang,
+    // tapi dibatasi 700 ms agar tidak menahan layar kalau jaringan lambat.
+    const loaded = new Promise((res) => {
+      if (document.readyState === 'complete') res()
+      else window.addEventListener('load', res, { once: true })
+    })
+    const fonts = document.fonts && document.fonts.ready ? document.fonts.ready.catch(() => {}) : Promise.resolve()
+    const cap = new Promise((res) => setTimeout(res, 700))
+    const ready = () => Promise.race([Promise.all([loaded, fonts]), cap]).then(() => requestAnimationFrame(() => requestAnimationFrame(close)))
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready, { once: true })
     else ready()
     // Batas keras: apa pun yang terjadi, overlay lepas.

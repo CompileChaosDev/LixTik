@@ -1,173 +1,151 @@
-// Pengaturan khusus fitur downloader.
-// Satu entri untuk setiap platform.
+// Pengaturan khusus fitur downloader. Satu entri per platform.
+// Kunci (tiktok, instagram, ...) harus sama dengan id di features.js.
 window.LX = window.LX || {}
 
 LX.platforms = {
   tiktok: {
     name: 'TikTok',
     title: 'TikTok Downloader',
-    subtitle: 'Simpan video TikTok atau ambil audionya.',
-    hint: 'Pilih MP4 untuk video atau MP3 untuk audio jika tersedia.',
-    placeholder: 'Tempel link TikTok di sini',
+    subtitle: 'Simpan video TikTok tanpa watermark, atau ambil suaranya saja.',
+    hint: 'Hasil tanpa watermark. Pilih MP4 atau MP3.',
+    placeholder: 'Tempel link TikTok',
     pattern: /tiktok\.com/i,
     path: '/tiktok',
     steps: [
-      'Buka TikTok dan pilih video yang ingin kamu simpan.',
-      'Ketuk <b>Bagikan</b>, lalu pilih <b>Salin tautan</b>.',
-      'Tempel tautan ke kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih MP4 untuk video atau MP3 untuk audio jika tersedia.'
+      'Buka videonya di TikTok, ketuk <b>Bagikan</b>, lalu <b>Salin tautan</b>.',
+      'Tempel linknya di kolom di atas (atau ketuk <b>Paste</b>).',
+      'Ketuk <b>Download</b> dan tunggu beberapa detik sampai hasilnya muncul.',
+      'Pilih <b>MP4</b> untuk video tanpa watermark (pilih HD kalau ada), atau <b>MP3</b> untuk suaranya saja.'
     ],
   },
-
   instagram: {
     name: 'Instagram',
     title: 'Instagram Downloader',
-    subtitle: 'Simpan Reel, video, dan foto dari Instagram.',
-    hint: 'Gunakan tautan postingan dari akun publik.',
-    placeholder: 'Tempel link Instagram di sini',
+    subtitle: 'Simpan reel, video, dan foto dari postingan Instagram.',
+    hint: 'Untuk postingan dan reel dari akun publik.',
+    placeholder: 'Tempel link Instagram',
     pattern: /instagram\.com/i,
     path: '/instagram',
     steps: [
-      'Buka Reel, video, atau foto yang ingin kamu simpan.',
-      'Ketuk <b>Bagikan</b> atau menu <b>titik tiga</b>, lalu pilih <b>Salin tautan</b>.',
-      'Tempel tautan ke kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih foto atau video yang ingin kamu simpan jika tersedia.'
+      'Buka postingan atau reel dari akun yang <b>tidak dikunci</b>. Ketuk ikon kirim atau titik tiga, lalu <b>Salin link</b>.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih video atau foto yang mau disimpan.'
     ],
   },
-
   pinterest: {
     name: 'Pinterest',
     title: 'Pinterest Downloader',
-    subtitle: 'Simpan gambar dan video dari Pinterest.',
-    hint: 'Tautan pin.it juga didukung.',
-    placeholder: 'Tempel link Pinterest di sini',
+    subtitle: 'Simpan video dan gambar kualitas asli dari Pinterest.',
+    hint: 'Link pendek pin.it juga bisa.',
+    placeholder: 'Tempel link Pinterest',
     pattern: /pinterest\.|pin\.it/i,
     path: '/pinterest',
     steps: [
-      'Buka Pinterest dan pilih pin yang ingin kamu simpan.',
-      'Ketuk <b>Bagikan</b>, lalu pilih <b>Salin tautan</b>.',
-      'Tempel tautan ke kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih gambar atau video yang tersedia untuk disimpan.'
+      'Buka pin-nya, ketuk <b>Bagikan</b>, lalu <b>Salin link</b>.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Simpan videonya atau gambar kualitas aslinya.'
     ],
   },
-
   youtube: {
     name: 'YouTube',
     title: 'YouTube Downloader',
     subtitle: 'Simpan video atau audio dari YouTube.',
-    hint: 'Tautan youtube.com dan youtu.be didukung.',
-    placeholder: 'Tempel link YouTube di sini',
+    hint: 'Video publik. Link youtu.be juga bisa.',
+    placeholder: 'Tempel link YouTube',
     pattern: /youtube\.com|youtu\.be/i,
     path: '/youtube',
     steps: [
-      'Buka video YouTube yang ingin kamu simpan.',
-      'Ketuk <b>Bagikan</b>, lalu pilih <b>Salin link</b>.',
-      'Tempel link ke kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih format yang tersedia untuk menyimpan hasilnya.'
+      'Buka postingan atau halamannya di YouTube, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
   },
-
   twitter: {
     name: 'Twitter / X',
     title: 'Twitter / X Downloader',
-    subtitle: 'Simpan video dan gambar dari Twitter atau X.',
-    hint: 'Gunakan tautan postingan yang dapat diakses.',
-    placeholder: 'Tempel link Twitter atau X di sini',
+    subtitle: 'Simpan video dan gambar dari postingan Twitter atau X.',
+    hint: 'Untuk postingan publik.',
+    placeholder: 'Tempel link Twitter atau X',
     pattern: /(^|[\/.])(twitter|x)\.com/i,
     path: '/twitter',
     steps: [
-      'Buka postingan Twitter atau X yang ingin kamu simpan.',
-      'Ketuk <b>Bagikan</b>, lalu pilih <b>Salin tautan</b>.',
-      'Tempel tautan ke kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih video atau gambar yang tersedia untuk disimpan.'
+      'Buka postingan atau halamannya di Twitter / X, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
   },
-
   facebook: {
     name: 'Facebook',
     title: 'Facebook Downloader',
-    subtitle: 'Simpan video dan Reel dari Facebook.',
-    hint: 'Tautan facebook.com dan fb.watch didukung.',
-    placeholder: 'Tempel link Facebook di sini',
+    subtitle: 'Simpan video dari postingan Facebook.',
+    hint: 'Untuk video dan Reel publik. Link fb.watch juga bisa.',
+    placeholder: 'Tempel link Facebook',
     pattern: /facebook\.com|fb\.watch/i,
     path: '/facebook',
     steps: [
-      'Buka video atau Reel Facebook yang ingin kamu simpan.',
-      'Ketuk <b>Bagikan</b> atau menu <b>titik tiga</b>, lalu pilih <b>Salin tautan</b>.',
-      'Tempel tautan ke kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih video yang tersedia, lalu simpan ke perangkat.'
+      'Buka postingan atau halamannya di Facebook, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
   },
-
   spotify: {
     name: 'Spotify',
     title: 'Spotify Downloader',
-    subtitle: 'Proses tautan lagu, album, atau playlist Spotify.',
-    hint: 'Format hasil mengikuti dukungan layanan.',
-    placeholder: 'Tempel link Spotify di sini',
+    subtitle: 'Ambil audio lagu, album, atau playlist Spotify.',
+    hint: 'Hasilnya berupa MP3.',
+    placeholder: 'Tempel link Spotify',
     pattern: /spotify\.com/i,
     path: '/spotify',
     steps: [
-      'Buka lagu, album, atau playlist yang ingin kamu proses.',
-      'Ketuk menu <b>titik tiga</b>, pilih <b>Bagikan</b>, lalu <b>Salin link</b>.',
-      'Tempel link ke kolom di atas, lalu ketuk <b>Download</b>.',
-      'Ikuti pilihan yang muncul untuk melihat hasil yang tersedia.'
+      'Buka postingan atau halamannya di Spotify, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
   },
-
   bandcamp: {
     name: 'Bandcamp',
     title: 'Bandcamp Downloader',
-    subtitle: 'Proses tautan lagu dan album Bandcamp.',
-    hint: 'Hasil mengikuti dukungan sumber dan layanan.',
-    placeholder: 'Tempel link Bandcamp di sini',
+    subtitle: 'Ambil audio dari lagu atau album Bandcamp.',
+    hint: 'Hasilnya berupa MP3.',
+    placeholder: 'Tempel link Bandcamp',
     pattern: /bandcamp\.com/i,
     path: '/bandcamp',
     steps: [
-      'Buka halaman lagu atau album Bandcamp yang ingin kamu proses.',
-      'Salin tautan halaman tersebut.',
-      'Tempel tautan ke kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih hasil yang tersedia untuk melanjutkan.'
+      'Buka postingan atau halamannya di Bandcamp, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
   },
-
   pixiv: {
     name: 'Pixiv',
     title: 'Pixiv Downloader',
-    subtitle: 'Simpan karya gambar dari Pixiv.',
-    hint: 'Gunakan tautan karya yang dapat diakses.',
-    placeholder: 'Tempel link Pixiv di sini',
+    subtitle: 'Simpan gambar kualitas asli dari Pixiv.',
+    hint: 'Untuk karya publik.',
+    placeholder: 'Tempel link Pixiv',
     pattern: /pixiv\.net/i,
     path: '/pixiv',
     steps: [
-      'Buka karya Pixiv yang ingin kamu simpan.',
-      'Salin tautan halaman karya tersebut.',
-      'Tempel tautan ke kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih gambar yang tersedia untuk disimpan.'
+      'Buka postingan atau halamannya di Pixiv, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
   },
-
   threads: {
     name: 'Threads',
     title: 'Threads Downloader',
-    subtitle: 'Simpan video dan gambar dari Threads.',
-    hint: 'Gunakan tautan postingan yang dapat diakses.',
-    placeholder: 'Tempel link Threads di sini',
+    subtitle: 'Simpan video dan gambar dari postingan Threads.',
+    hint: 'Untuk postingan publik.',
+    placeholder: 'Tempel link Threads',
     pattern: /threads\.(net|com)/i,
     path: '/threads',
     steps: [
-      'Buka postingan Threads yang ingin kamu simpan.',
-      'Ketuk <b>Bagikan</b>, lalu pilih <b>Salin tautan</b>.',
-      'Tempel tautan ke kolom di atas, lalu ketuk <b>Download</b>.',
-      'Pilih media yang tersedia untuk disimpan ke perangkat.'
+      'Buka postingan atau halamannya di Threads, lalu salin link-nya.',
+      'Tempel linknya di kolom di atas, lalu ketuk <b>Download</b>.',
+      'Pilih format yang kamu mau, lalu simpan ke perangkat.'
     ],
   }
 }
 
-LX.detectPlatform = (link) => {
-  const url = String(link || '').trim()
-
-  return Object.keys(LX.platforms).find((id) => {
-    return LX.platforms[id].pattern.test(url)
-  }) || null
-}
+// Cari platform dari sebuah link. Hasilnya id platform, atau null.
+LX.detectPlatform = (link) =>
+  Object.keys(LX.platforms).find((id) => LX.platforms[id].pattern.test(link)) || null
