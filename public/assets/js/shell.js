@@ -70,7 +70,6 @@ LX.renderShell = (page) => {
         <hr class="menu-line">
         <a class="menu-link menu-wa" href="#" data-channel="whatsapp" rel="noopener noreferrer">${LX.icons.whatsapp}Channel WhatsApp</a>
       </nav>
-      <p class="sidebar-foot">Gratis, tanpa login.</p>
     </aside>`
 
   LX.$('menu-open').addEventListener('click', LX.openMenu)
@@ -114,7 +113,7 @@ LX.boot = () => {
 
   LX.closeMenu()
   body.classList.remove('home-neon')
-  document.title = feature ? `${feature.pageTitle || feature.title} - ${LX.config.name}` : `${LX.config.name} - Semua fitur dalam satu tempat`
+  document.title = feature ? `${feature.pageTitle || feature.title} - ${LX.config.name}` : `${LX.config.name}`
   document.querySelectorAll('.footer p').forEach((p) => { p.innerHTML = `&copy; 2026 ${LX.config.name}` })
   LX.renderShell(page)
   if (LX.pages[kind]) LX.pages[kind]()
