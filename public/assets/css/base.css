@@ -46,12 +46,6 @@ html, body {
 
 body {
   background-color: var(--bg);
-  background-image:
-    linear-gradient(rgba(15, 23, 42, .13) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 23, 42, .13) 1px, transparent 1px);
-  background-size: 52px 52px;
-  background-attachment: fixed;
-  animation: grid-drift 3.2s linear infinite;
   color: var(--text);
   font: 400 15px/1.6 var(--font);
   -webkit-font-smoothing: antialiased;
@@ -125,33 +119,61 @@ svg {
   .sidebar, .overlay, .toast { transition: none; }
 }
 
-/* Pindah halaman: transisi native (Chrome Android) supaya tidak berkedip */
-@view-transition { navigation: auto; }
-
-/* Grid bergerak ke bawah, berulang mulus */
+/* Grid latar bergerak ke bawah, berulang mulus.
+   Digambar di layer sendiri dan digeser dengan transform (GPU), bukan background-position
+   yang memaksa seluruh layar digambar ulang di setiap frame. Tampilan identik dengan sebelumnya. */
+body:not(.home-neon)::before {
+  content: '';
+  position: fixed;
+  inset: -52px 0 0 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, .13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, .13) 1px, transparent 1px);
+  background-size: 52px 52px;
+  will-change: transform;
+  animation: grid-drift 3.2s linear infinite;
+}
 @keyframes grid-drift {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: 0 52px, 0 0; }
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, 52px, 0); }
 }
+/* Selama overlay transisi tampil, grid di belakangnya tidak perlu bergerak. */
+html.lx-tr-on body::before { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
-  body { animation: none; }
+  body::before { animation: none; }
 }
 
-/* Animasi transisi antar halaman: intro tas dan keranjang (LIXTIK) */
+/* Animasi transisi antar halaman: intro tas dan nama situs (dikendalikan transition.js).
+   Hanya transform dan opacity yang dianimasikan. */
 #lx-transition {
   position: fixed; inset: 0; z-index: 200;
   display: flex; justify-content: center; align-items: center;
   background: radial-gradient(ellipse at center, #f8fafc 0%, #e7ebef 65%, #dce2e8 100%);
-  animation: lxTrExit .35s ease 1.25s forwards;
+  opacity: 1;
+  contain: layout paint;
+  touch-action: none;
 }
-#lx-transition svg { width: min(90vw, 540px); overflow: visible; filter: drop-shadow(6px 9px 4px #0b203533); }
-#lx-transition .bag, #lx-transition .cart, #lx-transition .brand { opacity: 0; }
-#lx-transition .bag { animation: lxBagIn .6s cubic-bezier(.2,.8,.2,1) .05s forwards; }
-#lx-transition .brand { animation: lxBrandIn .45s ease .85s forwards; }
-@keyframes lxBagIn { 0% { opacity: 0; transform: translateX(-180px); } 75% { opacity: 1; transform: translateX(7px); } 100% { opacity: 1; transform: translateX(0); } }
-@keyframes lxCartIn { 0% { opacity: 0; transform: translateX(180px); } 75% { opacity: 1; transform: translateX(-7px); } 100% { opacity: 1; transform: translateX(0); } }
-@keyframes lxBrandIn { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes lxTrExit { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+#lx-transition.is-entering { animation: lxTrFade .16s ease-out calc(0s - var(--lx-el, 0ms)) both; }
+#lx-transition.is-exiting { opacity: 0; pointer-events: none; transition: opacity .26s ease; will-change: opacity; }
+#lx-transition .lx-tr-stage { position: relative; width: min(90vw, 540px); aspect-ratio: 540 / 470; }
+#lx-transition .lx-tr-layer {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  overflow: visible;
+  filter: drop-shadow(6px 9px 4px #0b203533);
+  backface-visibility: hidden;
+}
+#lx-transition .lx-tr-bag { will-change: transform, opacity; }
+#lx-transition .lx-tr-brand { will-change: transform, opacity; }
+#lx-transition.is-entering .lx-tr-bag { opacity: 0; animation: lxBagIn .6s cubic-bezier(.2,.8,.2,1) calc(.04s - var(--lx-el, 0ms)) forwards; }
+#lx-transition.is-entering .lx-tr-brand { opacity: 0; animation: lxBrandIn .42s ease calc(.34s - var(--lx-el, 0ms)) forwards; }
+/* Halaman tujuan: tampil langsung di posisi akhir, tidak memutar ulang animasi. */
+#lx-transition.is-static .lx-tr-layer { opacity: 1; transform: none; }
+#lx-transition.is-exiting .lx-tr-layer { will-change: auto; }
+@keyframes lxTrFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes lxBagIn { 0% { opacity: 0; transform: translate3d(-33.3%, 0, 0); } 75% { opacity: 1; transform: translate3d(1.3%, 0, 0); } 100% { opacity: 1; transform: translate3d(0, 0, 0); } }
+@keyframes lxBrandIn { from { opacity: 0; transform: translate3d(0, 5.3%, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
 @media (prefers-reduced-motion: reduce) {
-  #lx-transition, #lx-transition * { animation-duration: .01ms !important; animation-delay: 0ms !important; }
+  #lx-transition, #lx-transition * { animation-duration: .01ms !important; animation-delay: 0ms !important; transition-duration: .01ms !important; }
 }

@@ -11,7 +11,7 @@ LX.escape = (text) => {
 }
 
 LX.params = () => new URLSearchParams(location.search)
-LX.go = (href) => { location.href = href }
+// LX.go (pindah halaman + transisi) didefinisikan di transition.js
 
 let toastTimer = null
 LX.toast = (message) => {
@@ -106,31 +106,6 @@ LX.renderShell = (page) => {
   })
 }
 
-// Animasi transisi: saat pindah halaman, tampil intro tas dan keranjang dengan teks LIXTIK.
-LX.TR_SVG = `<svg viewBox="0 0 540 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LIXTIK">
-  <g transform="translate(170 40) scale(6.25)">
-    <defs><linearGradient id="lx-tr-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#7db4ff"/></linearGradient></defs>
-    <g class="bag">
-      <rect width="32" height="32" rx="9" fill="url(#lx-tr-grad)" stroke="none"/>
-      <path d="M16 7.5v12M11 14.8l5 5 5-5M9.5 24.5h13" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-    </g>
-  </g>
-  <text class="brand" x="270" y="420" text-anchor="middle" font-family="Poppins, Arial, Helvetica, sans-serif" font-size="45" font-weight="800" letter-spacing="2" fill="#082239">LIXTIK</text>
-</svg>`
-LX.showTransition = () => {
-  const old = document.getElementById('lx-transition')
-  if (old) old.remove()
-  const el = document.createElement('div')
-  el.id = 'lx-transition'
-  el.setAttribute('aria-hidden', 'true')
-  el.innerHTML = LX.TR_SVG.replace('>LIXTIK</text>', '>' + LX.escape(LX.config.name) + '</text>')
-  document.body.appendChild(el)
-}
-LX.hideTransition = () => {
-  const el = document.getElementById('lx-transition')
-  if (el) el.remove()
-}
-
 LX.boot = () => {
   const body = document.body
   const page = body.dataset.page || 'home'
@@ -141,14 +116,6 @@ LX.boot = () => {
   body.classList.remove('home-neon')
   document.title = feature ? `${feature.pageTitle || feature.title} - ${LX.config.name}` : `${LX.config.name} - Semua fitur dalam satu tempat`
   document.querySelectorAll('.footer p').forEach((p) => { p.innerHTML = `&copy; 2026 ${LX.config.name}` })
-  try {
-    if (sessionStorage.getItem(LX.TR_KEY)) {
-      sessionStorage.removeItem(LX.TR_KEY)
-      LX.showTransition()
-      setTimeout(LX.hideTransition, 1600)
-    }
-  } catch (err) {}
-
   LX.renderShell(page)
   if (LX.pages[kind]) LX.pages[kind]()
   window.scrollTo(0, 0)
@@ -163,13 +130,3 @@ if (!LX._bound) {
 
 // Halaman biasa: jalan otomatis. (Pratinjau memanggil LX.boot() sendiri.)
 if (!LX.manualBoot) document.addEventListener('DOMContentLoaded', LX.boot)
-
-// Klik link internal (menu, kartu, tombol) memicu transisi.
-document.addEventListener('click', (e) => {
-  if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
-  const a = e.target.closest('a[href^="/"]')
-  if (!a || a.target === '_blank' || a.hasAttribute('download')) return
-  if (a.getAttribute('href') === location.pathname) return
-  try { sessionStorage.setItem(LX.TR_KEY, '1') } catch (err) {}
-  LX.showTransition()
-})
