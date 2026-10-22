@@ -1,8 +1,6 @@
-// Halaman History: semua download dari semua fitur downloader.
+// Halaman History: semua download dari semua fitur downloader, dalam satu daftar gabungan.
 LX.pages.history = function () {
   const box = LX.$('history-list')
-  const filters = LX.$('history-filters')
-  let filter = 'all'
 
   const ago = (ms) => {
     const diff = Math.max(0, Date.now() - ms)
@@ -14,17 +12,10 @@ LX.pages.history = function () {
     return new Date(ms).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
   }
 
-  const renderFilters = () => {
-    const tabs = [{ id: 'all', title: 'Semua' }, ...LX.featuresIn('downloader')]
-    filters.innerHTML = tabs.map((t) =>
-      `<button class="filter ${t.id === filter ? 'active' : ''}" type="button" data-filter="${t.id}">${t.title}</button>`).join('')
-  }
-
   const render = () => {
     const all = LX.store.load().filter((item) => LX.platforms[item.platform])
-    const list = filter === 'all' ? all : all.filter((item) => item.platform === filter)
+    const list = all
     LX.$('history-clear').hidden = all.length === 0
-    filters.hidden = all.length === 0
 
     if (list.length === 0) {
       box.innerHTML = `
@@ -63,14 +54,6 @@ LX.pages.history = function () {
     }).join('')
   }
 
-  filters.addEventListener('click', (event) => {
-    const button = event.target.closest('[data-filter]')
-    if (!button) return
-    filter = button.dataset.filter
-    renderFilters()
-    render()
-  })
-
   box.addEventListener('click', (event) => {
     const button = event.target.closest('[data-hist]')
     if (!button) return
@@ -102,6 +85,5 @@ LX.pages.history = function () {
     img.parentElement.innerHTML = LX.icons[img.parentElement.dataset.platform] || LX.icons.download
   }, true)
 
-  renderFilters()
   render()
 }
